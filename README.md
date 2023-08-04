@@ -24,10 +24,8 @@
 
 # Panel Switch
 Easily switch between panels in Filament.
-
-![demo](https://github.com/bezhanSalleh/filament-panel-switch/assets/10007504/f084abc1-de48-4891-b7a7-be46762b8319)
     
-![Preview](./art/demo.gif) 
+![Demo](./art/demo.gif?raw=true "Demo") 
 
 
 ## Installation
