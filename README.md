@@ -1,5 +1,5 @@
 <!-- <a href="https://github.com/bezhansalleh/filament-panel-switch" class="filament-hidden"> -->
-![Filament Panel Switch](https://github.com/[bezhanSalleh]/[filament-panel-switch]/blob/[main]/art/banner.jpg?raw=true)
+![Filament Panel Switch](https://github.com/[bezhanSalleh]/[filament-panel-switch]/blob/3.x/art/banner.jpg?raw=true)
 <!-- </a> -->
 
 
