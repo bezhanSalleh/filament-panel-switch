@@ -1,16 +1,34 @@
-<!-- <a href="https://github.com/bezhansalleh/filament-panel-switch" class="filament-hidden"> -->
-![Filament Panel Switch](https://github.com/[bezhanSalleh]/[filament-panel-switch]/blob/3.x/art/banner.jpg?raw=true)
-<!-- </a> -->
+<a href="https://github.com/bezhansalleh/filament-panel-switch" class="filament-hidden">
 
+![Panel Switch](./art/banner.jpg?raw=true "Panel Switch")
+</a>
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/bezhansalleh/filament-panel-switch.svg?style=flat-square)](https://packagist.org/packages/bezhansalleh/filament-panel-switch)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-panel-switch/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/bezhansalleh/filament-panel-switch/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-panel-switch/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/bezhansalleh/filament-panel-switch/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/bezhansalleh/filament-panel-switch.svg?style=flat-square)](https://packagist.org/packages/bezhansalleh/filament-panel-switch)
+<p align="left">
+    <a href="https://filamentphp.com/docs/3.x/panels/installation">
+        <img alt="FILAMENT 8.x" src="https://img.shields.io/badge/FILAMENT-3.x-EBB304?style=for-the-badge">
+    </a>
+    <a href="https://packagist.org/packages/bezhansalleh/filament-panel-switch">
+        <img alt="Packagist" src="https://img.shields.io/packagist/v/bezhansalleh/filament-panel-switch.svg?style=for-the-badge&logo=packagist">
+    </a>
+    <a href="https://github.com/bezhansalleh/filament-panel-switch/actions?query=workflow%3Arun-tests+branch%3Amain" class="filament-hidden">
+        <img alt="Tests Passing" src="https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-panel-switch/run-tests.yml?style=for-the-badge&logo=github&label=tests">
+    </a>
+    <a href="https://github.com/bezhansalleh/filament-panel-switch/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain" class="filament-hidden">
+        <img alt="Code Style Passing" src="https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-panel-switch/run-laravel-pint.yml?style=for-the-badge&logo=github&label=code%20style">
+    </a>
 
+<a href="https://packagist.org/packages/bezhansalleh/filament-panel-switch">
+    <img alt="Downloads" src="https://img.shields.io/packagist/dt/bezhansalleh/filament-panel-switch.svg?style=for-the-badge" >
+    </a>
+</p>
 
 # Panel Switch
-Easily switch between panels in Filament. Highly customizable
+Easily switch between panels in Filament.
+
+![demo](https://github.com/bezhanSalleh/filament-panel-switch/assets/10007504/f084abc1-de48-4891-b7a7-be46762b8319)
+    
+![Preview](./art/demo.gif) 
+
 
 ## Installation
 
