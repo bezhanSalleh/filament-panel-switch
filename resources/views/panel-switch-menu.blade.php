@@ -1,6 +1,7 @@
 
 <x-filament::dropdown
-    placement="bottom-start"
+    teleport
+    placement="bottom-end"
 >
     <x-slot name="trigger">
         <button
