@@ -48,7 +48,7 @@ class PanelSwitch
 
         FilamentView::registerRenderHook(
             name: $static->getRenderHook(),
-            hook: function () use($static){
+            hook: function () use ($static) {
                 if (! $static->isVisible()) {
                     return '';
                 }
