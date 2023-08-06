@@ -24,6 +24,19 @@ class PanelSwitch
     public static function make(): static
     {
         $static = app(static::class);
+
+        $static->visible(function () {
+            if (($user = auth()->user()) === null) {
+                return false;
+            }
+
+            if (method_exists($user, 'canAccessPanel')) {
+                return $user->canAccessPanel(filament()->getCurrentPanel() ?? filament()->getDefaultPanel());
+            }
+
+            return true;
+        });
+
         $static->configure();
 
         return $static;
@@ -33,21 +46,9 @@ class PanelSwitch
     {
         $static = static::make();
 
-        $static->visible(function () {
-            if (($user = auth()->user()) === null) {
-                return false;
-            }
-
-            if (method_exists($user, 'hasRole')) {
-                return $user->hasRole('super_admin');
-            }
-
-            return true;
-        });
-
         FilamentView::registerRenderHook(
             name: $static->getRenderHook(),
-            hook: function () use ($static) {
+            hook: function () use($static){
                 if (! $static->isVisible()) {
                     return '';
                 }

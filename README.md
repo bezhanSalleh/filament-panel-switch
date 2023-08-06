@@ -47,8 +47,8 @@ public function boot()
 }
 ```
 
-##### Visibility
-By default, the package checks whether you have `Spatie permissions` plugin installed and checks for a role called `super_admin`. You can further customize whether the panel switch should be shown.
+#### Visibility
+By default, the package checks whether the user can access the panel if so the switch will be visible. You can further customize whether the panel switch should be shown.
 
 ```php
 PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
@@ -61,7 +61,7 @@ PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
 });
 ```
 
-##### Who Can Switch Panels?
+#### Who Can Switch Panels?
 You might want an option in a situation where you want a group of your users to see the panel but not be able to switch panels. You can do that by using the `canSwitchPanels()` method.
 
 ```php
@@ -82,7 +82,7 @@ PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
 });
 ```
 
-##### Placement
+#### Placement
 You can choose where the panel switch menu should be placed. By default panel switch menu is rendered via 'panels::topbar.start' `Hook`. But you can change it to anyone of the other available hooks.
 ```php
 PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
