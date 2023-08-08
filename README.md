@@ -47,6 +47,19 @@ public function boot()
 }
 ```
 
+#### Labels
+You have the ability to set personalized labels for your panels by utilizing the `labels()` method. This feature can also be employed for translation purposes.
+
+```php
+PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
+    $panelSwitch
+        ->labels([
+            'admin' => 'Custom Admin Label',
+            'general_manager' => __('General Manager')
+        ]);
+});
+```
+
 #### Visibility
 By default, the package checks whether the user can access the panel if so the switch will be visible. You can further customize whether the panel switch should be shown.
 
