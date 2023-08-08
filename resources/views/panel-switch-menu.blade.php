@@ -12,7 +12,7 @@
                 P
             </span>
             <span class="text-white">
-                {{ str($currentPanel->getId())->ucfirst() }}
+                {{ $labels[$currentPanel->getId()] ?? str($currentPanel->getId())->ucfirst() }}
             </span>
 
             <x-filament::icon
@@ -31,7 +31,7 @@
                 :badge="str($panel->getId())->substr(0, 2)->upper()"
                 tag="a"
             >
-                {{ str($panel->getId())->ucfirst() }}
+                {{ $labels[$currentPanel->getId()] ?? str($currentPanel->getId())->ucfirst() }}
             </x-filament::dropdown.list.item>
         @endforeach
     </x-filament::dropdown.list>

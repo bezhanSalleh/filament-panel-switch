@@ -15,6 +15,8 @@ class PanelSwitch
 
     protected array $excludes = [];
 
+    protected array $labels = [];
+
     protected bool | Closure | null $visible = null;
 
     protected bool | Closure | null $canSwitchPanel = true;
@@ -55,6 +57,7 @@ class PanelSwitch
 
                 return view('filament-panel-switch::panel-switch-menu', [
                     'panels' => $static->getPanels(),
+                    'labels' => $static->getLabels(),
                     'currentPanel' => $static->getCurrentPanel(),
                     'canSwitchPanels' => $static->isAbleToSwitchPanels(),
                 ]);
@@ -67,6 +70,18 @@ class PanelSwitch
         $this->excludes = $panelIds;
 
         return $this;
+    }
+
+    public function labels(array $labels): static
+    {
+        $this->labels = $labels;
+
+        return $this;
+    }
+
+    public function getLabels(): array
+    {
+        return $this->labels;
     }
 
     public function getExcludes(): array
