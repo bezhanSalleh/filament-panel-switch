@@ -31,7 +31,7 @@
                 :badge="str($panel->getId())->substr(0, 2)->upper()"
                 tag="a"
             >
-                {{ $labels[$currentPanel->getId()] ?? str($currentPanel->getId())->ucfirst() }}
+                {{ $labels[$panel->getId()] ?? str($panel->getId())->ucfirst() }}
             </x-filament::dropdown.list.item>
         @endforeach
     </x-filament::dropdown.list>
