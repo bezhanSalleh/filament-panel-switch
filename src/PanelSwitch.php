@@ -15,6 +15,8 @@ class PanelSwitch
 
     protected array $excludes = [];
 
+    protected array $includes = [];
+
     protected bool | Closure | null $visible = null;
 
     protected bool | Closure | null $canSwitchPanel = true;
@@ -74,6 +76,18 @@ class PanelSwitch
         return $this->excludes;
     }
 
+    public function includes(array $panelIds): static
+    {
+        $this->includes = $panelIds;
+
+        return $this;
+    }
+
+    public function getIncludes(): array
+    {
+        return $this->includes;
+    }
+
     public function visible(bool | Closure $visible): static
     {
         $this->visible = $visible;
@@ -124,7 +138,8 @@ class PanelSwitch
     public function getPanels(): array
     {
         return collect(filament()->getPanels())
-            ->reject(fn (Panel $panel) => in_array($panel->getId(), $this->excludes))
+            ->reject(fn (Panel $panel) => in_array($panel->getId(), $this->getExcludes()))
+            ->filter(fn (Panel $panel) => in_array($panel->getId(), $this->getIncludes()))
             ->toArray();
     }
 
