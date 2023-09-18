@@ -57,18 +57,18 @@
             @foreach ($panels as $panel)
                 <a
                     href="{{ $canSwitchPanels && $panel->getId() !== $currentPanel->getId() ? config('app.url') . '/' . $panel->getPath() : '#' }}"
-                    class="flex flex-col items-center justify-center flex-1 hover:cursor-pointer group"
+                    class="flex flex-col items-center justify-center flex-1 hover:cursor-pointer group panel-switch-card"
                 >
                     <div
                         @class([
-                            "p-2 bg-white rounded-lg shadow-md dark:bg-gray-800",
+                            "p-2 bg-white rounded-lg shadow-md dark:bg-gray-800 panel-switch-card-section",
                             "group-hover:ring-2 group-hover:ring-primary-600" => $panel->getId() !== $currentPanel->getId(),
                             "ring-2 ring-primary-600" => $panel->getId() === $currentPanel->getId(),
                         ])
                     >
                         @if ($renderIconAsImage)
                             <img
-                                class="rounded-lg"
+                                class="rounded-lg panel-switch-card-image"
                                 style="width: {{ $iconSize * 4 }}px; height: {{ $iconSize * 4 }}px;"
                                 src="{{ $icons[$panel->getId()] ?? 'https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/3.x/art/banner.jpg' }}"
                                 alt="Panel Image"
@@ -77,12 +77,12 @@
                             @php
                                 $iconName = $icons[$panel->getId()] ?? 'heroicon-s-square-2-stack' ;
                             @endphp
-                            @svg($iconName, 'text-primary-600', ['style' => 'width: ' . ($iconSize * 4) . 'px; height: ' . ($iconSize * 4). 'px;'])
+                            @svg($iconName, 'text-primary-600 panel-switch-card-icon', ['style' => 'width: ' . ($iconSize * 4) . 'px; height: ' . ($iconSize * 4). 'px;'])
                         @endif
                     </div>
                     <span
                         @class([
-                            "mt-2 text-sm font-medium text-center text-gray-400 dark:text-gray-200 break-words",
+                            "mt-2 text-sm font-medium text-center text-gray-400 dark:text-gray-200 break-words panel-switch-card-title",
                             "text-gray-400 dark:text-gray-200 group-hover:text-primary-600 group-hover:dark:text-primary-400" => $panel->getId() !== $currentPanel->getId(),
                             "text-primary-600 dark:text-primary-400" => $panel->getId() === $currentPanel->getId(),
                         ])
