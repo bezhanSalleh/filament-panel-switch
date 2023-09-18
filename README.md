@@ -39,6 +39,8 @@ That's it, no other steps are required.
 ## Configuration
 Right now you can configure a couple things for the plugin. By calling the `PanelSwitch` class's `configureUsing()` method inside a service provider's `boot()` method.
 ```php
+use BezhanSalleh\PanelSwitch\PanelSwitch;
+
 public function boot()
 {
     PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
@@ -68,7 +70,7 @@ PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
     $panelSwitch
         ->visible(fn (): bool => auth()->user()?->hasAnyRole([
             'admin',
-            'general_manager'
+            'general_manager',
             'super_admin',
         ]));
 });
