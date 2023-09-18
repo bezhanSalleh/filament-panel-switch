@@ -19,6 +19,20 @@ class PanelSwitch
 
     protected bool | Closure | null $canSwitchPanel = true;
 
+    protected bool | Closure $isModalSlideOver = false;
+
+    protected string | Closure | null $modalWidth = null;
+
+    protected bool | Closure $isSimple = false;
+
+    protected array | Closure $icons = [];
+
+    protected int | Closure | null $iconSize = null;
+
+    protected bool $renderIconAsImage = false;
+
+    protected string | Closure $heading = 'Switch Panels';
+
     protected string $renderHook = 'panels::topbar.start';
 
     public static function make(): static
@@ -54,12 +68,26 @@ class PanelSwitch
                 }
 
                 return view('filament-panel-switch::panel-switch-menu', [
-                    'panels' => $static->getPanels(),
                     'currentPanel' => $static->getCurrentPanel(),
                     'canSwitchPanels' => $static->isAbleToSwitchPanels(),
+                    'heading' => $static->getHeading(),
+                    'icons' => $static->getIcons(),
+                    'iconSize' => $static->getIconSize(),
+                    'isSimple' => $static->isSimple(),
+                    'isSlideOver' => $static->isModalSlideOver(),
+                    'modalWidth' => $static->getModalWidth(),
+                    'panels' => $static->getPanels(),
+                    'renderIconAsImage' => $static->getRenderIconAsImage(),
                 ]);
             },
         );
+    }
+
+    public function canSwitchPanels(bool | Closure $condition): static
+    {
+        $this->canSwitchPanel = $condition;
+
+        return $this;
     }
 
     public function excludes(array $panelIds): static
@@ -69,9 +97,63 @@ class PanelSwitch
         return $this;
     }
 
-    public function getExcludes(): array
+    public function heading(string $heading): static
     {
-        return $this->excludes;
+        $this->heading = $heading;
+
+        return $this;
+    }
+
+    public function icons(array | Closure $icons, bool $asImage = false): static
+    {
+        if ($asImage) {
+            foreach ($icons as $key => $icon) {
+                if (!str($icon)->startsWith(['http://', 'https://'])) {
+                    throw new \Exception('All icons must be URLs when $asImage is true.');
+                }
+            }
+        }
+
+        $this->renderIconAsImage = $asImage;
+
+        $this->icons = $icons;
+
+        return $this;
+    }
+
+    public function iconSize(int | Closure | null $size = null): static
+    {
+        $this->iconSize = $size;
+
+        return $this;
+    }
+
+    public function modalWidth(string | Closure | null $width = null): static
+    {
+        $this->modalWidth = $width;
+
+        return $this;
+    }
+
+    public function renderHook(string $hook): static
+    {
+        $this->renderHook = $hook;
+
+        return $this;
+    }
+
+    public function slideOver(bool | Closure $condition = true): static
+    {
+        $this->isModalSlideOver = $condition;
+
+        return $this;
+    }
+
+    public function simple(bool | Closure $condition = true): static
+    {
+        $this->isSimple = $condition;
+
+        return $this;
     }
 
     public function visible(bool | Closure $visible): static
@@ -81,16 +163,29 @@ class PanelSwitch
         return $this;
     }
 
-    public function isVisible(): bool
+    public function getExcludes(): array
     {
-        return $this->evaluate($this->visible);
+        return $this->excludes;
     }
 
-    public function canSwitchPanels(bool | Closure $condition): static
+    public function getHeading(): string
     {
-        $this->canSwitchPanel = $condition;
+        return (string) $this->evaluate($this->heading);
+    }
 
-        return $this;
+    public function getIcons(): array
+    {
+        return (array) $this->evaluate($this->icons);
+    }
+
+    public function getIconSize(): int
+    {
+        return $this->evaluate($this->iconSize) ?? 32;
+    }
+
+    public function getModalWidth(): string
+    {
+        return $this->evaluate($this->modalWidth) ?? 'screen';
     }
 
     public function isAbleToSwitchPanels(): bool
@@ -106,16 +201,19 @@ class PanelSwitch
         return $this->evaluate($this->canSwitchPanel);
     }
 
-    public function renderHook(string $hook): static
+    public function isModalSlideOver(): bool
     {
-        $this->renderHook = $hook;
-
-        return $this;
+        return (bool) $this->evaluate($this->isModalSlideOver);
     }
 
-    public function getRenderHook(): string
+    public function isSimple(): bool
     {
-        return $this->renderHook;
+        return (bool) $this->evaluate($this->isSimple);
+    }
+
+    public function isVisible(): bool
+    {
+        return (bool) $this->evaluate($this->visible);
     }
 
     /**
@@ -131,5 +229,15 @@ class PanelSwitch
     public function getCurrentPanel(): Panel
     {
         return filament()->getCurrentPanel();
+    }
+
+    public function getRenderHook(): string
+    {
+        return $this->renderHook;
+    }
+
+    public function getRenderIconAsImage(): bool
+    {
+        return $this->renderIconAsImage;
     }
 }
