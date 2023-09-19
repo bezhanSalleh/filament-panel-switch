@@ -33,7 +33,7 @@ class PanelSwitch
 
     protected bool $renderIconAsImage = false;
 
-    protected string | Closure $heading = 'Switch Panels';
+    protected string | Closure $modalHeading = 'Switch Panels';
 
     protected string $renderHook = 'panels::global-search.before';
 
@@ -72,7 +72,7 @@ class PanelSwitch
                 return view('filament-panel-switch::panel-switch-menu', [
                     'currentPanel' => $static->getCurrentPanel(),
                     'canSwitchPanels' => $static->isAbleToSwitchPanels(),
-                    'heading' => $static->getHeading(),
+                    'heading' => $static->getModalHeading(),
                     'icons' => $static->getIcons(),
                     'iconSize' => $static->getIconSize(),
                     'isSimple' => $static->isSimple(),
@@ -100,9 +100,9 @@ class PanelSwitch
         return $this;
     }
 
-    public function heading(string $heading): static
+    public function modalHeading(string | Closure $modalHeading): static
     {
-        $this->heading = $heading;
+        $this->modalHeading = $modalHeading;
 
         return $this;
     }
@@ -111,7 +111,7 @@ class PanelSwitch
     {
         if ($asImage) {
             foreach ($icons as $key => $icon) {
-                if (!str($icon)->startsWith(['http://', 'https://'])) {
+                if (! str($icon)->startsWith(['http://', 'https://'])) {
                     throw new \Exception('All icons must be URLs when $asImage is true.');
                 }
             }
@@ -124,7 +124,7 @@ class PanelSwitch
         return $this;
     }
 
-    public function iconSize(int | Closure | null $size = null): static
+    public function iconSize(int | Closure $size = null): static
     {
         $this->iconSize = $size;
 
@@ -138,7 +138,7 @@ class PanelSwitch
         return $this;
     }
 
-    public function modalWidth(string | Closure | null $width = null): static
+    public function modalWidth(string | Closure $width = null): static
     {
         $this->modalWidth = $width;
 
@@ -178,9 +178,9 @@ class PanelSwitch
         return $this->excludes;
     }
 
-    public function getHeading(): string
+    public function getModalHeading(): string
     {
-        return (string) $this->evaluate($this->heading);
+        return (string) $this->evaluate($this->modalHeading);
     }
 
     public function getIcons(): array

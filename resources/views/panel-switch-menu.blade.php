@@ -13,7 +13,7 @@
 
                 <x-filament::icon
                     icon="heroicon-m-chevron-down"
-                    icon-alias="panels::panel-switch-toggle-icon"
+                    icon-alias="panels::panel-switch-simple-icon"
                     class="w-5 h-5 text-white ms-auto shrink-0"
                 />
 
@@ -34,9 +34,15 @@
 
     </x-filament::dropdown>
 @else
+    <style>
+        .panel-switch-modal .fi-modal-content {
+            align-items: center !important;
+            justify-content: center !important;
+        }
+    </style>
     <x-filament::icon-button
         icon="heroicon-s-square-2-stack"
-        icon-alias="panels::panel-switch-toggle-icon"
+        icon-alias="panels::panel-switch-modern-icon"
         icon-size="lg"
         @click="$dispatch('open-modal', { id: 'panel-switch' })"
         label="Switch Panels"
