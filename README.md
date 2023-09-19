@@ -34,6 +34,7 @@
     - [Who Can Switch Panels?](#who-can-switch-panels)
     - [Panel Exclusion](#panel-exclusion)
     - [Placement](#placement)
+    - [Usage](#usage)
     - [Theming](#theming)
     - [Testing](#testing)
   - [Changelog](#changelog)
@@ -212,21 +213,27 @@ PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
 });
 ```
 
-The `PanelSwitch` has a fluent api so you can chain the methods together and configure everything in one go.
+### Usage
+The `Panel Switch Plugin` has a fluent api so you can chain the methods together and configure everything in one go.
 
 ```php
+use BezhanSalleh\PanelSwitch\PanelSwitch;
+
 PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
     $panelSwitch
-        ->visible(fn (): bool => auth()->user()?->hasAnyRole([
-            'admin',
-            'general_manager'
-            'super_admin',
-        ]))
-        ->canSwitchPanels(fn (): bool => auth()->user()?->can('switch_panels'))
-        ->excludes([
-            'saas'
+        ->heading('Available Panels')
+        ->modalWidth('sm')
+        ->slideOver()
+        ->icons([
+            'admin' => 'heroicon-o-square-2-stack',
+            'app' => 'heroicon-o-star',
         ])
-        ->renderHook('panels::global-search.before');
+        ->iconSize(16)
+        ->labels([
+            'admin' => 'Admin Panel',
+            'app' => 'SaaS Application'
+        ]);
+        
 });
 ```
 ### Theming
