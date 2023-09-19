@@ -10,10 +10,10 @@
     <a href="https://packagist.org/packages/bezhansalleh/filament-panel-switch">
         <img alt="Packagist" src="https://img.shields.io/packagist/v/bezhansalleh/filament-panel-switch.svg?style=for-the-badge&logo=packagist">
     </a>
-    <a href="https://github.com/bezhansalleh/filament-panel-switch/actions?query=workflow%3Arun-tests+branch%3Amain" class="filament-hidden">
+    <a href="https://github.com/bezhansalleh/filament-panel-switch/actions?query=workflow%3Arun-tests+branch%3A3.x" class="filament-hidden">
         <img alt="Tests Passing" src="https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-panel-switch/run-tests.yml?style=for-the-badge&logo=github&label=tests">
     </a>
-    <a href="https://github.com/bezhansalleh/filament-panel-switch/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain" class="filament-hidden">
+    <a href="https://github.com/bezhansalleh/filament-panel-switch/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3A3.x" class="filament-hidden">
         <img alt="Code Style Passing" src="https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-panel-switch/run-laravel-pint.yml?style=for-the-badge&logo=github&label=code%20style">
     </a>
 
