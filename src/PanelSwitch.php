@@ -29,11 +29,13 @@ class PanelSwitch
 
     protected int | Closure | null $iconSize = null;
 
+    protected array | Closure $labels = [];
+
     protected bool $renderIconAsImage = false;
 
     protected string | Closure $heading = 'Switch Panels';
 
-    protected string $renderHook = 'panels::topbar.start';
+    protected string $renderHook = 'panels::global-search.before';
 
     public static function make(): static
     {
@@ -75,6 +77,7 @@ class PanelSwitch
                     'iconSize' => $static->getIconSize(),
                     'isSimple' => $static->isSimple(),
                     'isSlideOver' => $static->isModalSlideOver(),
+                    'labels' => $static->getLabels(),
                     'modalWidth' => $static->getModalWidth(),
                     'panels' => $static->getPanels(),
                     'renderIconAsImage' => $static->getRenderIconAsImage(),
@@ -124,6 +127,13 @@ class PanelSwitch
     public function iconSize(int | Closure | null $size = null): static
     {
         $this->iconSize = $size;
+
+        return $this;
+    }
+
+    public function labels(array | Closure $labels): static
+    {
+        $this->labels = $labels;
 
         return $this;
     }
@@ -181,6 +191,11 @@ class PanelSwitch
     public function getIconSize(): int
     {
         return $this->evaluate($this->iconSize) ?? 32;
+    }
+
+    public function getLabels(): array
+    {
+        return (array) $this->evaluate($this->labels);
     }
 
     public function getModalWidth(): string

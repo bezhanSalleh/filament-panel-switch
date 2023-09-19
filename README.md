@@ -39,12 +39,27 @@ That's it, no other steps are required.
 ## Configuration
 Right now you can configure a couple things for the plugin. By calling the `PanelSwitch` class's `configureUsing()` method inside a service provider's `boot()` method.
 ```php
+use BezhanSalleh\PanelSwitch\PanelSwitch;
+
 public function boot()
 {
     PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
         //
     });
 }
+```
+
+#### Labels
+You have the ability to set personalized labels for your panels by utilizing the `labels()` method. This feature can also be employed for translation purposes.
+
+```php
+PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
+    $panelSwitch
+        ->labels([
+            'admin' => 'Custom Admin Label',
+            'general_manager' => __('General Manager')
+        ]);
+});
 ```
 
 #### Visibility
@@ -55,7 +70,7 @@ PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
     $panelSwitch
         ->visible(fn (): bool => auth()->user()?->hasAnyRole([
             'admin',
-            'general_manager'
+            'general_manager',
             'super_admin',
         ]));
 });

@@ -5,26 +5,29 @@
             <button type="button"
                 class="flex items-center justify-center w-full p-2 text-sm font-medium rounded-lg shadow-sm outline-none group gap-x-3 bg-primary-500">
                 <span class="w-5 h-5 font-semibold bg-white rounded-full shrink-0 text-primary-500">
-                    P
+                    {{str($labels[$currentPanel->getId()] ?? $currentPanel->getId())->substr(0, 1)->upper()}}
                 </span>
                 <span class="text-white">
-                    {{ str($currentPanel->getId())->ucfirst() }}
+                    {{ $labels[$currentPanel->getId()] ?? str($currentPanel->getId())->ucfirst() }}
                 </span>
 
-                <x-filament::icon icon="heroicon-m-chevron-down" icon-alias="panels::panel-switch-menu.toggle-button"
-                    class="w-5 h-5 text-white ms-auto shrink-0" />
+                <x-filament::icon
+                    icon="heroicon-m-chevron-down"
+                    icon-alias="panels::panel-switch-toggle-icon"
+                    class="w-5 h-5 text-white ms-auto shrink-0"
+                />
 
             </button>
         </x-slot>
 
         <x-filament::dropdown.list>
             @foreach ($panels as $panel)
-                <x-filament::dropdown.list.item :href="$canSwitchPanels && $panel->getId() !== $currentPanel->getId()
-                    ? config('app.url') . '/' . $panel->getPath()
-                    : null" :badge="str($panel->getId())
-                    ->substr(0, 2)
-                    ->upper()" tag="a">
-                    {{ str($panel->getId())->ucfirst() }}
+                <x-filament::dropdown.list.item
+                    :href="$canSwitchPanels && $panel->getId() !== $currentPanel->getId() ? config('app.url') . '/' . $panel->getPath() : null"
+                    :badge="str($labels[$panel->getId()] ?? $panel->getId())->substr(0, 2)->upper()"
+                    tag="a"
+                >
+                {{ $labels[$panel->getId()] ?? str($panel->getId())->ucfirst() }}
                 </x-filament::dropdown.list.item>
             @endforeach
         </x-filament::dropdown.list>
@@ -33,11 +36,12 @@
 @else
     <x-filament::icon-button
         icon="heroicon-s-square-2-stack"
-        size="lg"
+        icon-alias="panels::panel-switch-toggle-icon"
+        icon-size="lg"
         @click="$dispatch('open-modal', { id: 'panel-switch' })"
         label="Switch Panels"
-        @class(["!rounded-full bg-custom-100 dark:bg-custom-500/20 !w-9 !h-9"])
-        style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }};"
+        @class(["bg-gray-100 !rounded-full dark:bg-custom-500/20"])
+        style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
     />
 
     <x-filament::modal
@@ -87,7 +91,7 @@
                             "text-primary-600 dark:text-primary-400" => $panel->getId() === $currentPanel->getId(),
                         ])
                     >
-                        Application Management Tool
+                        {{ $labels[$panel->getId()] ?? str($panel->getId())->ucfirst()}}
                     </span>
                 </a>
             @endforeach
