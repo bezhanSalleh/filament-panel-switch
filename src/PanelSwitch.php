@@ -111,7 +111,7 @@ class PanelSwitch
     {
         if ($asImage) {
             foreach ($icons as $key => $icon) {
-                if (!str($icon)->startsWith(['http://', 'https://'])) {
+                if (! str($icon)->startsWith(['http://', 'https://'])) {
                     throw new \Exception('All icons must be URLs when $asImage is true.');
                 }
             }
@@ -124,7 +124,7 @@ class PanelSwitch
         return $this;
     }
 
-    public function iconSize(int | Closure | null $size = null): static
+    public function iconSize(int | Closure $size = null): static
     {
         $this->iconSize = $size;
 
@@ -138,7 +138,7 @@ class PanelSwitch
         return $this;
     }
 
-    public function modalWidth(string | Closure | null $width = null): static
+    public function modalWidth(string | Closure $width = null): static
     {
         $this->modalWidth = $width;
 
