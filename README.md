@@ -46,9 +46,9 @@
 # Panel Switch
 The Panel Switch Plugin for Filament offers a robust and customizable component for switching between panels in applications built with FilamentPHP.
     
-![Demo](./art/modern-icon-demo.gif?raw=true "Modern Icon Demo") 
-![Demo](./art/modern-image-demo.gif?raw=true "Modern Image Demo") 
-![Demo](./art/demo.gif?raw=true "Simple Demo") 
+![Demo](https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/master/art/modern-icon-demo.gif?raw=true "Modern Icon Demo") 
+![Demo](https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/master/art/modern-image-demo.gif?raw=true "Modern Image Demo") 
+![Demo](https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/master/art/demo.gif?raw=true "Simple Demo") 
 
 ## Installation
 
