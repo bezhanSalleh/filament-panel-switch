@@ -21,6 +21,9 @@
     <img alt="Downloads" src="https://img.shields.io/packagist/dt/bezhansalleh/filament-panel-switch.svg?style=for-the-badge" >
     </a>
 </p>
+
+<p class="filament-hidden">
+
 <h2>Table Of Contents</h2>
 
 - [Panel Switch](#panel-switch)
@@ -42,6 +45,8 @@
   - [Security Vulnerabilities](#security-vulnerabilities)
   - [Credits](#credits)
   - [License](#license)
+
+</p>
 
 # Panel Switch
 The Panel Switch Plugin for Filament offers a robust and customizable component for switching between panels in applications built with FilamentPHP.
