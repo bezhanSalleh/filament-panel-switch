@@ -22,31 +22,71 @@
     </a>
 </p>
 
-<p class="filament-hidden">
+<h2 class="filament-hidden">Table Of Contents</h2>
+<ul class="filament-hidden">
+<li>
+<a href="#panel-switch">Panel Switch</a>
+<ul>
+<li>
+<a href="#installation">Installation</a>
+</li>
+<li>
+<a href="#configuration">Configuration</a>
+<ul>
+<li>
+<a href="#design-or-style">Design or Style</a>
+</li>
+<li>
+<a href="#labels">Labels</a>
+</li>
+<li>
+<a href="#iconsimages">Icons/Images</a>
+</li>
+<li>
+<a href="#iconimage-size">Icon/Image Size</a>
+</li>
+<li>
+<a href="#visibility">Visibility</a>
+</li>
+<li>
+<a href="#who-can-switch-panels">Who Can Switch Panels?</a>
+</li>
+<li>
+<a href="#panel-exclusion">Panel Exclusion</a>
+</li>
+<li>
+<a href="#placement">Placement</a>
+</li>
+<li>
+<a href="#usage">Usage</a>
+</li>
+<li>
+<a href="#theming">Theming</a>
+</li>
+<li>
+<a href="#testing">Testing</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#changelog">Changelog</a>
+</li>
+<li>
+<a href="#contributing">Contributing</a>
+</li>
+<li>
+<a href="#security-vulnerabilities">Security Vulnerabilities</a>
+</li>
+<li>
+<a href="#credits">Credits</a>
+</li>
+<li>
+<a href="#license">License</a>
+</li>
+</ul>
+</li>
+</ul>
 
-<h2>Table Of Contents</h2>
-
-- [Panel Switch](#panel-switch)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-    - [Design or Style](#design-or-style)
-    - [Labels](#labels)
-    - [Icons/Images](#iconsimages)
-    - [Icon/Image Size](#iconimage-size)
-    - [Visibility](#visibility)
-    - [Who Can Switch Panels?](#who-can-switch-panels)
-    - [Panel Exclusion](#panel-exclusion)
-    - [Placement](#placement)
-    - [Usage](#usage)
-    - [Theming](#theming)
-    - [Testing](#testing)
-  - [Changelog](#changelog)
-  - [Contributing](#contributing)
-  - [Security Vulnerabilities](#security-vulnerabilities)
-  - [Credits](#credits)
-  - [License](#license)
-
-</p>
 
 # Panel Switch
 The Panel Switch Plugin for Filament offers a robust and customizable component for switching between panels in applications built with FilamentPHP.
