@@ -13,7 +13,7 @@ class PanelSwitch
     use Configurable;
     use EvaluatesClosures;
 
-    protected array $excludes = [];
+    protected array | Closure $excludes = [];
 
     protected bool | Closure | null $visible = null;
 
@@ -93,7 +93,7 @@ class PanelSwitch
         return $this;
     }
 
-    public function excludes(array $panelIds): static
+    public function excludes(array | Closure $panelIds): static
     {
         $this->excludes = $panelIds;
 
@@ -175,7 +175,7 @@ class PanelSwitch
 
     public function getExcludes(): array
     {
-        return $this->excludes;
+        return (array) $this->evaluate($this->excludes);
     }
 
     public function getModalHeading(): string
@@ -237,7 +237,7 @@ class PanelSwitch
     public function getPanels(): array
     {
         return collect(filament()->getPanels())
-            ->reject(fn (Panel $panel) => in_array($panel->getId(), $this->excludes))
+            ->reject(fn (Panel $panel) => in_array($panel->getId(), $this->getExcludes()))
             ->toArray();
     }
 
