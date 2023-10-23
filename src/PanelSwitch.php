@@ -33,6 +33,8 @@ class PanelSwitch
 
     protected array | Closure $labels = [];
 
+    protected array | Closure $urls = [];
+
     protected bool $renderIconAsImage = false;
 
     protected string | Closure $modalHeading = 'Switch Panels';
@@ -80,6 +82,7 @@ class PanelSwitch
                     'isSimple' => $static->isSimple(),
                     'isSlideOver' => $static->isModalSlideOver(),
                     'labels' => $static->getLabels(),
+                    'urls' => $static->getUrls(),
                     'modalWidth' => $static->getModalWidth(),
                     'panels' => $static->getPanels(),
                     'renderIconAsImage' => $static->getRenderIconAsImage(),
@@ -136,6 +139,13 @@ class PanelSwitch
     public function labels(array | Closure $labels): static
     {
         $this->labels = $labels;
+
+        return $this;
+    }
+
+    public function urls(array | Closure $urls): static
+    {
+        $this->urls = $urls;
 
         return $this;
     }
@@ -211,6 +221,11 @@ class PanelSwitch
     public function getLabels(): array
     {
         return (array) $this->evaluate($this->labels);
+    }
+
+    public function getUrls(): array
+    {
+        return (array) $this->evaluate($this->urls);
     }
 
     public function getModalWidth(): string

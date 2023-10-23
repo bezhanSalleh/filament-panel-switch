@@ -23,7 +23,7 @@
         <x-filament::dropdown.list>
             @foreach ($panels as $panel)
                 <x-filament::dropdown.list.item
-                    :href="$canSwitchPanels && $panel->getId() !== $currentPanel->getId() ? '/' . $panel->getPath() : null"
+                    :href="$canSwitchPanels && $panel->getId() !== $currentPanel->getId() ? ($urls[$panel->getId()] ?? ('/' . $panel->getPath())) : null"
                     :badge="str($labels[$panel->getId()] ?? $panel->getId())->substr(0, 2)->upper()"
                     tag="a"
                 >
@@ -66,7 +66,7 @@
         >
             @foreach ($panels as $panel)
                 <a
-                    href="{{ $canSwitchPanels && $panel->getId() !== $currentPanel->getId() ? '/' . $panel->getPath() : '#' }}"
+                    href="{{ $canSwitchPanels && $panel->getId() !== $currentPanel->getId() ? ($urls[$panel->getId()] ?? ('/' . $panel->getPath())) : '#' }}"
                     class="flex flex-col items-center justify-center flex-1 hover:cursor-pointer group panel-switch-card"
                 >
                     <div
