@@ -1,3 +1,14 @@
+@php
+    $getUrlScheme = (string) app()->environment('production') ? 'https://' : 'http://';
+
+    $getPanelPath = fn (\Filament\Panel $panel): string => filled($domains = $panel->getDomains())
+            ? str(collect($domains)->first())->prepend($getUrlScheme)->toString()
+            : str($panel->getPath())->prepend('/')->toString();
+
+    $getHref = fn (\Filament\Panel $panel): ?string => $canSwitchPanels && $panel->getId() !== $currentPanel->getId()
+            ? $getPanelPath($panel)
+            : null;
+@endphp
 
 @if ($isSimple)
     <x-filament::dropdown teleport placement="bottom-end">
@@ -23,7 +34,7 @@
         <x-filament::dropdown.list>
             @foreach ($panels as $panel)
                 <x-filament::dropdown.list.item
-                    :href="$canSwitchPanels && $panel->getId() !== $currentPanel->getId() ? '/' . $panel->getPath() : null"
+                    :href="$getHref($panel)"
                     :badge="str($labels[$panel->getId()] ?? $panel->getId())->substr(0, 2)->upper()"
                     tag="a"
                 >
@@ -66,7 +77,7 @@
         >
             @foreach ($panels as $panel)
                 <a
-                    href="{{ $canSwitchPanels && $panel->getId() !== $currentPanel->getId() ? '/' . $panel->getPath() : '#' }}"
+                    href="{{ $getHref($panel) }}"
                     class="flex flex-col items-center justify-center flex-1 hover:cursor-pointer group panel-switch-card"
                 >
                     <div
