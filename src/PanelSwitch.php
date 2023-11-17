@@ -17,8 +17,6 @@ class PanelSwitch
 
     protected bool | Closure | null $visible = null;
 
-    protected bool | Closure | null $excludeCurrentPanel = null;
-
     protected bool | Closure | null $canSwitchPanel = true;
 
     protected bool | Closure $isModalSlideOver = false;
@@ -185,22 +183,9 @@ class PanelSwitch
         return $this;
     }
 
-    public function excludeCurrentPanel(bool | Closure $excludeCurrentPanel): static
-    {
-        $this->excludeCurrentPanel = $excludeCurrentPanel;
-
-        return $this;
-    }
-
     public function getExcludes(): array
     {
-        $excludes = (array)$this->evaluate($this->excludes) ?? [];
-
-        if ($this->getExcludeCurrentPanel()) {
-            $excludes = array_merge($excludes, [$this->getCurrentPanel()->getId()]);
-        }
-
-        return $excludes;
+        return (array) $this->evaluate($this->excludes);
     }
 
     public function getModalHeading(): string
@@ -259,11 +244,6 @@ class PanelSwitch
     public function isVisible(): bool
     {
         return (bool) $this->evaluate($this->visible);
-    }
-
-    public function getExcludeCurrentPanel(): bool
-    {
-        return (bool) $this->evaluate($this->excludeCurrentPanel);
     }
 
     /**
