@@ -52,6 +52,7 @@
         }
     </style>
     <x-filament::icon-button
+        x-data="{}"
         icon="heroicon-s-square-2-stack"
         icon-alias="panels::panel-switch-modern-icon"
         icon-size="lg"
@@ -66,12 +67,11 @@
         :width="$modalWidth"
         alignment="center"
         :slide-over="$isSlideOver"
+        :sticky-header="$isSlideOver"
+        :heading="$heading"
+        display-classes="block"
         class="panel-switch-modal"
     >
-        <x-slot name="heading">
-            {{ $heading }}
-        </x-slot>
-
         <div
             class="flex flex-wrap items-center justify-center gap-4 md:gap-6"
         >
