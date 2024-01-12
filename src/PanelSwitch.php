@@ -4,15 +4,11 @@ namespace BezhanSalleh\PanelSwitch;
 
 use Closure;
 use Filament\Panel;
-use Filament\Support\Concerns\Configurable;
-use Filament\Support\Concerns\EvaluatesClosures;
+use Filament\Support\Components\Component;
 use Filament\Support\Facades\FilamentView;
 
-class PanelSwitch
+class PanelSwitch extends Component
 {
-    use Configurable;
-    use EvaluatesClosures;
-
     protected array | Closure $excludes = [];
 
     protected bool | Closure | null $visible = null;
