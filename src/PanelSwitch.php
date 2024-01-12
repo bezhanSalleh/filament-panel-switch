@@ -120,7 +120,7 @@ class PanelSwitch extends Component
         return $this;
     }
 
-    public function iconSize(int | Closure $size = null): static
+    public function iconSize(int | Closure | null $size = null): static
     {
         $this->iconSize = $size;
 
@@ -134,7 +134,7 @@ class PanelSwitch extends Component
         return $this;
     }
 
-    public function modalWidth(string | Closure $width = null): static
+    public function modalWidth(string | Closure | null $width = null): static
     {
         $this->modalWidth = $width;
 
