@@ -2,6 +2,16 @@
 
 All notable changes to `filament-panel-switch` will be documented in this file.
 
+## 1.0.5 - 2024-01-12
+
+### What's Changed
+
+* Bump actions/checkout from 3 to 4 by @dependabot in https://github.com/bezhanSalleh/filament-panel-switch/pull/17
+* Bump aglipanci/laravel-pint-action from 2.3.0 to 2.3.1 by @dependabot in https://github.com/bezhanSalleh/filament-panel-switch/pull/18
+* fix configurable trait usage by @bezhanSalleh in https://github.com/bezhanSalleh/filament-panel-switch/pull/20
+
+**Full Changelog**: https://github.com/bezhanSalleh/filament-panel-switch/compare/1.0.4...1.0.5
+
 ## 1.0.4 - 2023-11-18
 
 ### What's Changed
