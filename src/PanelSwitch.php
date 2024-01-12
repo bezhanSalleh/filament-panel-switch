@@ -4,15 +4,11 @@ namespace BezhanSalleh\PanelSwitch;
 
 use Closure;
 use Filament\Panel;
-use Filament\Support\Concerns\Configurable;
-use Filament\Support\Concerns\EvaluatesClosures;
+use Filament\Support\Components\Component;
 use Filament\Support\Facades\FilamentView;
 
-class PanelSwitch
+class PanelSwitch extends Component
 {
-    use Configurable;
-    use EvaluatesClosures;
-
     protected array | Closure $excludes = [];
 
     protected bool | Closure | null $visible = null;
@@ -124,7 +120,7 @@ class PanelSwitch
         return $this;
     }
 
-    public function iconSize(int | Closure $size = null): static
+    public function iconSize(int | Closure | null $size = null): static
     {
         $this->iconSize = $size;
 
@@ -138,7 +134,7 @@ class PanelSwitch
         return $this;
     }
 
-    public function modalWidth(string | Closure $width = null): static
+    public function modalWidth(string | Closure | null $width = null): static
     {
         $this->modalWidth = $width;
 
