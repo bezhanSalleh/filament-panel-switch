@@ -1,9 +1,5 @@
 @php
-    $getUrlScheme = (string) app()->environment('production') ? 'https://' : 'http://';
-
-    $getPanelPath = fn (\Filament\Panel $panel): string => filled($domains = $panel->getDomains())
-            ? str(collect($domains)->first())->prepend($getUrlScheme)->toString()
-            : str($panel->getPath())->prepend('/')->toString();
+    $getPanelPath = fn (\Filament\Panel $panel): string => $panel->getHomeUrl() ?? $panel->getUrl();
 
     $getHref = fn (\Filament\Panel $panel): ?string => $canSwitchPanels && $panel->getId() !== $currentPanel->getId()
             ? $getPanelPath($panel)
