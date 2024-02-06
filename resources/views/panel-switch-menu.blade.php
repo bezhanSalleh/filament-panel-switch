@@ -1,5 +1,12 @@
 @php
-    $getPanelPath = fn (\Filament\Panel $panel): string => $panel->getHomeUrl() ?? $panel->getUrl();
+    $getPanelPath = function (\Filament\Panel $panel): string {
+        $filament = app('filament');
+        $currentPanel = $filament->getCurrentPanel();
+        $filament->setCurrentPanel($panel);
+        $url = $panel->getUrl();
+        $filament->setCurrentPanel($currentPanel);
+        return $url;
+    };
 
     $getHref = fn (\Filament\Panel $panel): ?string => $canSwitchPanels && $panel->getId() !== $currentPanel->getId()
             ? $getPanelPath($panel)
