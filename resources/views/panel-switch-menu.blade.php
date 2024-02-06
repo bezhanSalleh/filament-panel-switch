@@ -8,9 +8,8 @@
         return $url;
     };
 
-    $getHref = fn (\Filament\Panel $panel): ?string => $canSwitchPanels && $panel->getId() !== $currentPanel->getId()
-            ? $getPanelPath($panel)
-            : null;
+    $getHref = fn(\Filament\Panel $panel): ?string => $canSwitchPanels ? $getPanelPath($panel) : null;
+
 @endphp
 
 @if ($isSimple)
