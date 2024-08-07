@@ -1,13 +1,15 @@
 @php
-    $getUrlScheme = (string) app()->environment('production') ? 'https://' : 'http://';
+    $getPanelPath = function (\Filament\Panel $panel): string {
+        $filament = app('filament');
+        $currentPanel = $filament->getCurrentPanel();
+        $filament->setCurrentPanel($panel);
+        $url = $panel->getUrl();
+        $filament->setCurrentPanel($currentPanel);
+        return $url;
+    };
 
-    $getPanelPath = fn (\Filament\Panel $panel): string => filled($domains = $panel->getDomains())
-            ? str(collect($domains)->first())->prepend($getUrlScheme)->toString()
-            : str($panel->getPath())->prepend('/')->toString();
+    $getHref = fn(\Filament\Panel $panel): ?string => $canSwitchPanels ? $getPanelPath($panel) : null;
 
-    $getHref = fn (\Filament\Panel $panel): ?string => $canSwitchPanels && $panel->getId() !== $currentPanel->getId()
-            ? $getPanelPath($panel)
-            : null;
 @endphp
 
 @if ($isSimple)
