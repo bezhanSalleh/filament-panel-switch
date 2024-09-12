@@ -1,5 +1,5 @@
 @php
-    $getPanelPath = function (\Filament\Panel $panel): string {
+    $getPanelPath = function (\Filament\Panel $panel): ?string {
         $filament = app('filament');
         $currentPanel = $filament->getCurrentPanel();
         $filament->setCurrentPanel($panel);
