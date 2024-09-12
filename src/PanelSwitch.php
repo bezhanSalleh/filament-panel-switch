@@ -4,11 +4,17 @@ namespace BezhanSalleh\PanelSwitch;
 
 use Closure;
 use Filament\Panel;
+use Illuminate\Support\Arr;
+use Filament\Facades\Filament;
 use Filament\Support\Components\Component;
 use Filament\Support\Facades\FilamentView;
 
+use function PHPUnit\Framework\callback;
+
 class PanelSwitch extends Component
 {
+    use Concerns\HasPanelValidator;
+
     protected array | Closure $excludes = [];
 
     protected bool | Closure | null $visible = null;
@@ -26,6 +32,8 @@ class PanelSwitch extends Component
     protected int | Closure | null $iconSize = null;
 
     protected array | Closure $labels = [];
+
+    protected array | Closure | null $panels = null;
 
     protected bool $renderIconAsImage = false;
 
@@ -89,6 +97,9 @@ class PanelSwitch extends Component
         return $this;
     }
 
+    /**
+     * @deprecated Use `panels()` instead.
+     */
     public function excludes(array | Closure $panelIds): static
     {
         $this->excludes = $panelIds;
@@ -137,6 +148,13 @@ class PanelSwitch extends Component
     public function modalWidth(string | Closure | null $width = null): static
     {
         $this->modalWidth = $width;
+
+        return $this;
+    }
+
+    public function panels(array | Closure | null $panels = null): static
+    {
+        $this->panels = $panels;
 
         return $this;
     }
@@ -232,14 +250,28 @@ class PanelSwitch extends Component
      */
     public function getPanels(): array
     {
-        return collect(filament()->getPanels())
-            ->reject(fn (Panel $panel) => in_array($panel->getId(), $this->getExcludes()))
+        $panelIds = (array) $this->evaluate($this->panels);
+
+        return collect(Filament::getPanels())
+            ->when(
+                value: filled($panelIds),
+                callback: function($panelCollection) use($panelIds) {
+                    $this->areUserProvidedPanelsValid($panelIds);
+
+                    $withDefaultOrder = $panelCollection->only($panelIds);
+
+                    return collect($panelIds)
+                        ->map(fn (string $id) => $withDefaultOrder[$id])
+                        ->filter();
+                },
+                default: fn ($panelCollection) => $panelCollection
+            )
             ->toArray();
     }
 
     public function getCurrentPanel(): Panel
     {
-        return filament()->getCurrentPanel();
+        return Filament::getCurrentPanel();
     }
 
     public function getRenderHook(): string
