@@ -241,7 +241,7 @@ PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
 });
 ```
 
-### Panels `New(1.0.7)`
+### Panels
 By default all the panels available will be listed in the panel switch menu. But by providing an array of panel ids to the `panels()` method you can limit the panels that will be listed. 
 
 ```php
@@ -255,7 +255,7 @@ PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
 ```
 Then `panels()` method also accepts a closure that returns an array of panel ids. This is useful when you want to dynamically determine the panels that will be listed. The plugin will also validate the panels to ensure that they are valid filament panels. If any of the panels provided are invalid, the plugin will throw an `InvalidArgumentException`.
 
-### Sort Order `New(1.0.7)`
+### Sort Order
 By default the panels will be listed in the order they were registered in `config/app.php`'s `providers` array or in the order they are provided through the `panels()` method. But you can opt-in to sort the panels either in `asc` or `desc` order via `sort()` method. 
 ```php
 PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
