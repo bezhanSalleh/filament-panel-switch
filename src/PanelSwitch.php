@@ -3,6 +3,7 @@
 namespace BezhanSalleh\PanelSwitch;
 
 use Closure;
+use Filament\Facades\Filament;
 use Filament\Panel;
 use Filament\Support\Components\Component;
 use Filament\Support\Facades\FilamentView;
@@ -43,7 +44,7 @@ class PanelSwitch extends Component
             }
 
             if (method_exists($user, 'canAccessPanel')) {
-                return $user->canAccessPanel(filament()->getCurrentPanel() ?? filament()->getDefaultPanel());
+                return $user->canAccessPanel(Filament::getCurrentPanel() ?? Filament::getDefaultPanel());
             }
 
             return true;
@@ -61,13 +62,13 @@ class PanelSwitch extends Component
         FilamentView::registerRenderHook(
             name: $static->getRenderHook(),
             hook: function () use ($static) {
+
                 if (! $static->isVisible()) {
                     return '';
                 }
 
                 return view('filament-panel-switch::panel-switch-menu', [
                     'currentPanel' => $static->getCurrentPanel(),
-                    'canSwitchPanels' => $static->isAbleToSwitchPanels(),
                     'heading' => $static->getModalHeading(),
                     'icons' => $static->getIcons(),
                     'iconSize' => $static->getIconSize(),
@@ -232,14 +233,15 @@ class PanelSwitch extends Component
      */
     public function getPanels(): array
     {
-        return collect(filament()->getPanels())
+        return collect(Filament::getPanels())
             ->reject(fn (Panel $panel) => in_array($panel->getId(), $this->getExcludes()))
+            ->mapWithKeys(fn (Panel $panel) => [$panel->getId() => $this->isAbleToSwitchPanels() ? url($panel->getPath()) : null])
             ->toArray();
     }
 
     public function getCurrentPanel(): Panel
     {
-        return filament()->getCurrentPanel();
+        return Filament::getCurrentPanel() ?? Filament::getDefaultPanel();
     }
 
     public function getRenderHook(): string
