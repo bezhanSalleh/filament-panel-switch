@@ -2,6 +2,15 @@
 
 All notable changes to `filament-panel-switch` will be documented in this file.
 
+## 1.0.7 - 2024-10-10
+
+### What's Changed
+
+* [Fix] Switching between tenant aware panel and normal panel by @bezhanSalleh in https://github.com/bezhanSalleh/filament-panel-switch/pull/34
+* [Feature&deprecation] `panels()` and `sort()` deprecated `excludes()` by @bezhanSalleh in https://github.com/bezhanSalleh/filament-panel-switch/pull/35
+
+**Full Changelog**: https://github.com/bezhanSalleh/filament-panel-switch/compare/1.0.6...1.0.7
+
 ## 1.0.6 - 2024-08-07
 
 ### What's Changed
