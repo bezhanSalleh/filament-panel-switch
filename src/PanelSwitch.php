@@ -10,6 +10,8 @@ use Filament\Support\Facades\FilamentView;
 
 class PanelSwitch extends Component
 {
+    use Concerns\HasPanelValidator;
+
     protected array | Closure $excludes = [];
 
     protected bool | Closure | null $visible = null;
@@ -28,29 +30,37 @@ class PanelSwitch extends Component
 
     protected array | Closure $labels = [];
 
+    protected array | Closure | null $panels = null;
+
     protected bool $renderIconAsImage = false;
 
     protected string | Closure $modalHeading = 'Switch Panels';
 
     protected string $renderHook = 'panels::global-search.before';
 
+    protected ?string $sortOrder = null;
+
     public static function make(): static
     {
         $static = app(static::class);
 
-        $static->visible(function () {
+        $static->visible(function () use ($static) {
             if (($user = auth()->user()) === null) {
                 return false;
             }
 
             if (method_exists($user, 'canAccessPanel')) {
-                return $user->canAccessPanel(Filament::getCurrentPanel() ?? Filament::getDefaultPanel());
+                return $user->canAccessPanel($static->getCurrentPanel());
             }
 
             return true;
         });
 
         $static->configure();
+
+        if (count($static->getPanels()) < 2) {
+            $static->visible(false);
+        }
 
         return $static;
     }
@@ -90,6 +100,9 @@ class PanelSwitch extends Component
         return $this;
     }
 
+    /**
+     * @deprecated Use `panels()` instead.
+     */
     public function excludes(array | Closure $panelIds): static
     {
         $this->excludes = $panelIds;
@@ -142,6 +155,13 @@ class PanelSwitch extends Component
         return $this;
     }
 
+    public function panels(array | Closure | null $panels = null): static
+    {
+        $this->panels = $panels;
+
+        return $this;
+    }
+
     public function renderHook(string $hook): static
     {
         $this->renderHook = $hook;
@@ -159,6 +179,19 @@ class PanelSwitch extends Component
     public function simple(bool | Closure $condition = true): static
     {
         $this->isSimple = $condition;
+
+        return $this;
+    }
+
+    /**
+     * Whether to sort the panels by their order or not.
+     * 1. null - Default order, provided by the user through the `panels` method.
+     * 2. 'asc' - Ascending order
+     * 3. 'desc' - Descending order
+     */
+    public function sort(string $order = 'asc'): static
+    {
+        $this->sortOrder = $order;
 
         return $this;
     }
@@ -228,14 +261,35 @@ class PanelSwitch extends Component
         return (bool) $this->evaluate($this->visible);
     }
 
-    /**
-     * @return array<string, Panel>
-     */
+    public function getSortOrder(): ?string
+    {
+        return $this->evaluate($this->sortOrder);
+    }
+
     public function getPanels(): array
     {
+        $panelIds = (array) $this->evaluate($this->panels);
+
         return collect(Filament::getPanels())
             ->reject(fn (Panel $panel) => in_array($panel->getId(), $this->getExcludes()))
+            ->when(
+                value: filled($panelIds),
+                callback: function ($panelCollection) use ($panelIds) {
+                    $this->areUserProvidedPanelsValid($panelIds);
+
+                    $withDefaultOrder = $panelCollection->only($panelIds);
+
+                    return collect($panelIds)
+                        ->map(fn (string $id) => $withDefaultOrder[$id])
+                        ->filter();
+                },
+                default: fn ($panelCollection) => $panelCollection
+            )
             ->mapWithKeys(fn (Panel $panel) => [$panel->getId() => $this->isAbleToSwitchPanels() ? url($panel->getPath()) : null])
+            ->when(
+                value: filled($this->getSortOrder()),
+                callback: fn ($panelCollection) => $panelCollection->sortKeys(descending: $this->getSortOrder() === 'desc')
+            )
             ->toArray();
     }
 
