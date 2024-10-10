@@ -3,13 +3,10 @@
 namespace BezhanSalleh\PanelSwitch;
 
 use Closure;
-use Filament\Panel;
-use Illuminate\Support\Arr;
 use Filament\Facades\Filament;
+use Filament\Panel;
 use Filament\Support\Components\Component;
 use Filament\Support\Facades\FilamentView;
-
-use function PHPUnit\Framework\callback;
 
 class PanelSwitch extends Component
 {
@@ -41,23 +38,29 @@ class PanelSwitch extends Component
 
     protected string $renderHook = 'panels::global-search.before';
 
+    protected null | string $sortOrder = null;
+
     public static function make(): static
     {
         $static = app(static::class);
 
-        $static->visible(function () {
+        $static->visible(function () use ($static) {
             if (($user = auth()->user()) === null) {
                 return false;
             }
 
             if (method_exists($user, 'canAccessPanel')) {
-                return $user->canAccessPanel(filament()->getCurrentPanel() ?? filament()->getDefaultPanel());
+                return $user->canAccessPanel($static->getCurrentPanel());
             }
 
             return true;
         });
 
         $static->configure();
+
+        if (count($static->getPanels()) < 2) {
+            $static->visible(false);
+        }
 
         return $static;
     }
@@ -69,13 +72,13 @@ class PanelSwitch extends Component
         FilamentView::registerRenderHook(
             name: $static->getRenderHook(),
             hook: function () use ($static) {
+
                 if (! $static->isVisible()) {
                     return '';
                 }
 
                 return view('filament-panel-switch::panel-switch-menu', [
                     'currentPanel' => $static->getCurrentPanel(),
-                    'canSwitchPanels' => $static->isAbleToSwitchPanels(),
                     'heading' => $static->getModalHeading(),
                     'icons' => $static->getIcons(),
                     'iconSize' => $static->getIconSize(),
@@ -180,6 +183,19 @@ class PanelSwitch extends Component
         return $this;
     }
 
+    /**
+     * Whether to sort the panels by their order or not.
+     * 1. null - Default order, provided by the user through the `panels` method.
+     * 2. 'asc' - Ascending order
+     * 3. 'desc' - Descending order
+     */
+    public function sort(string $order = 'asc'): static
+    {
+        $this->sortOrder = $order;
+
+        return $this;
+    }
+
     public function visible(bool | Closure $visible): static
     {
         $this->visible = $visible;
@@ -245,17 +261,20 @@ class PanelSwitch extends Component
         return (bool) $this->evaluate($this->visible);
     }
 
-    /**
-     * @return array<string, Panel>
-     */
+    public function getSortOrder(): ?string
+    {
+        return $this->evaluate($this->sortOrder);
+    }
+
     public function getPanels(): array
     {
         $panelIds = (array) $this->evaluate($this->panels);
 
         return collect(Filament::getPanels())
+            ->reject(fn (Panel $panel) => in_array($panel->getId(), $this->getExcludes()))
             ->when(
                 value: filled($panelIds),
-                callback: function($panelCollection) use($panelIds) {
+                callback: function ($panelCollection) use ($panelIds) {
                     $this->areUserProvidedPanelsValid($panelIds);
 
                     $withDefaultOrder = $panelCollection->only($panelIds);
@@ -266,12 +285,17 @@ class PanelSwitch extends Component
                 },
                 default: fn ($panelCollection) => $panelCollection
             )
+            ->mapWithKeys(fn (Panel $panel) => [$panel->getId() => $this->isAbleToSwitchPanels() ? url($panel->getPath()) : null])
+            ->when(
+                value: filled($this->getSortOrder()),
+                callback: fn ($panelCollection) => $panelCollection->sortKeys(descending: $this->getSortOrder() === 'desc')
+            )
             ->toArray();
     }
 
     public function getCurrentPanel(): Panel
     {
-        return Filament::getCurrentPanel();
+        return Filament::getCurrentPanel() ?? Filament::getDefaultPanel();
     }
 
     public function getRenderHook(): string

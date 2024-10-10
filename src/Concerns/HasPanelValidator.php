@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace BezhanSalleh\PanelSwitch\Concerns;
 
-use Closure;
-use InvalidArgumentException;
 use Filament\Facades\Filament;
+use InvalidArgumentException;
 
 trait HasPanelValidator
 {
@@ -18,7 +17,7 @@ trait HasPanelValidator
         $validated = collect($panelIds)->diff(collect(Filament::getPanels())->keys()->toArray());
 
         if ($validated->isNotEmpty()) {
-            throw new InvalidArgumentException("Invalid panel IDs: {$validated->implode(', ')}");
+            throw new InvalidArgumentException("Invalid Filament Panel. Make sure the panel ids passed to the `Panel Switch`, are valid and do exist. [`{$validated->implode(', ')}`]");
         }
     }
 }

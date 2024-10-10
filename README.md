@@ -52,7 +52,9 @@
 <a href="#who-can-switch-panels">Who Can Switch Panels?</a>
 </li>
 <li>
-<a href="#panel-exclusion">Panel Exclusion</a>
+<a href="#panels">Panel [New 1.1.0]</a>
+</li>
+<a href="#sort-order">Sort Order [New 1.1.0]</a>
 </li>
 <li>
 <a href="#placement">Placement</a>
@@ -237,14 +239,31 @@ PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
 });
 ```
 
-### Panel Exclusion
-By default all the panels available will be listed in the panel switch menu. But you can exclude some of them by using the `excludes()` method.
+### Panels `New(1.1.0)`
+By default all the panels available will be listed in the panel switch menu. But by providing an array of panel ids to the `panels()` method you can limit the panels that will be listed. 
 
 ```php
 PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
-    $panelSwitch->excludes([
-        'saas'
+    $panelSwitch->panels([
+        'admin',
+        'dev',
+        'app'
     ]);
+});
+```
+Then `panels()` method also accepts a closure that returns an array of panel ids. This is useful when you want to dynamically determine the panels that will be listed. The plugin will also validate the panels to ensure that they are valid filament panels. If any of the panels provided are invalid, the plugin will throw an `InvalidArgumentException`.
+
+### Sort Order `New(1.1.0)`
+By default the panels will be listed in the order they were registered in `config/app.php`'s `providers` array or in the order they are provided through the `panels()` method. But you can opt-in to sort the panels either in `asc` or `desc` order via `sort()` method. 
+```php
+PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
+    $panelSwitch
+        ...
+        ->panels(['admin', 'dev', 'app']) // default order if `sort()` method not used 
+        ->sort() // ['admin', 'app', 'dev']
+        // ->sort(order: 'desc') // ['dev', 'app', 'admin']
+        ...
+        ;
 });
 ```
 
@@ -266,6 +285,7 @@ use BezhanSalleh\PanelSwitch\PanelSwitch;
 
 PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
     $panelSwitch
+        ->panels(['admin', 'app', 'dev'])
         ->heading('Available Panels')
         ->modalWidth('sm')
         ->slideOver()
