@@ -38,7 +38,7 @@ class PanelSwitch extends Component
 
     protected string $renderHook = 'panels::global-search.before';
 
-    protected null | string $sortOrder = null;
+    protected ?string $sortOrder = null;
 
     public static function make(): static
     {
