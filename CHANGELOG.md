@@ -2,6 +2,23 @@
 
 All notable changes to `filament-panel-switch` will be documented in this file.
 
+## 1.1.0 - 2025-05-12
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.2.0 to 2.3.0 by @dependabot in https://github.com/bezhanSalleh/filament-panel-switch/pull/39
+* Bump aglipanci/laravel-pint-action from 2.4 to 2.5 by @dependabot in https://github.com/bezhanSalleh/filament-panel-switch/pull/40
+* Bump dependabot/fetch-metadata from 2.3.0 to 2.4.0 by @dependabot in https://github.com/bezhanSalleh/filament-panel-switch/pull/42
+* Change button label to match modal heading dynamic behaviour by @ryanmortier in https://github.com/bezhanSalleh/filament-panel-switch/pull/37
+* Fix: Custom panel domains does not work. by @pelmered in https://github.com/bezhanSalleh/filament-panel-switch/pull/41
+
+### New Contributors
+
+* @ryanmortier made their first contribution in https://github.com/bezhanSalleh/filament-panel-switch/pull/37
+* @pelmered made their first contribution in https://github.com/bezhanSalleh/filament-panel-switch/pull/41
+
+**Full Changelog**: https://github.com/bezhanSalleh/filament-panel-switch/compare/1.0.7...1.1.0
+
 ## 1.0.7 - 2024-10-10
 
 ### What's Changed
