@@ -7,6 +7,8 @@ use Filament\Facades\Filament;
 use Filament\Panel;
 use Filament\Support\Components\Component;
 use Filament\Support\Facades\FilamentView;
+use Illuminate\Support\Arr;
+use League\Uri\Uri;
 
 class PanelSwitch extends Component
 {
@@ -285,12 +287,20 @@ class PanelSwitch extends Component
                 },
                 default: fn ($panelCollection) => $panelCollection
             )
-            ->mapWithKeys(fn (Panel $panel) => [$panel->getId() => $this->isAbleToSwitchPanels() ? url($panel->getPath()) : null])
+            ->mapWithKeys(fn (Panel $panel) => [$panel->getId() => $this->isAbleToSwitchPanels() ? $this->getPanelUrl($panel) : null])
             ->when(
                 value: filled($this->getSortOrder()),
                 callback: fn ($panelCollection) => $panelCollection->sortKeys(descending: $this->getSortOrder() === 'desc')
             )
             ->toArray();
+    }
+
+    protected function getPanelUrl(Panel $panel)
+    {
+        return Uri::new()
+           ->withPath('/'.$panel->getPath())
+           ->withHost(Arr::first($panel->getDomains()))
+           ->toString();
     }
 
     public function getCurrentPanel(): Panel
