@@ -2,6 +2,14 @@
 
 All notable changes to `filament-panel-switch` will be documented in this file.
 
+## 1.1.1 - 2025-05-14
+
+### What's Changed
+
+* Fix bug where path starts with / by @pelmered in https://github.com/bezhanSalleh/filament-panel-switch/pull/44
+
+**Full Changelog**: https://github.com/bezhanSalleh/filament-panel-switch/compare/1.1.0...1.1.1
+
 ## 1.1.0 - 2025-05-12
 
 ### What's Changed
