@@ -298,7 +298,7 @@ class PanelSwitch extends Component
     protected function getPanelUrl(Panel $panel)
     {
         return Uri::new()
-            ->withPath("/" . ltrim($panel->getPath(), "/"))
+            ->withPath('/' . ltrim($panel->getPath(), '/'))
             ->withHost(Arr::first($panel->getDomains()))
             ->toString();
     }
