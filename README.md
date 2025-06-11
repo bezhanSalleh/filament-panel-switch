@@ -62,13 +62,7 @@
 <li>
 <a href="#usage">Usage</a>
 </li>
-<li>
-<a href="#theming">Theming</a>
-</li>
 <a href="#panel-exclusion">Panel Exclusion [@deprecated]</a>
-</li>
-<li>
-<a href="#testing">Testing</a>
 </li>
 </ul>
 </li>
@@ -106,6 +100,19 @@ You can install the package via composer:
 ```bash
 composer require bezhansalleh/filament-panel-switch
 ```
+
+> [!IMPORTANT]
+> The plugin follows Filament's theming rules. So, to use the plugin create a custom theme if you haven't already, and add the following line to your `theme.css` file:
+
+```php
+@source '../../../../vendor/bezhansalleh/filament-panel-switch/resources/views/**/*.blade.php';
+```
+Now build your theme using: 
+```bash
+npm run build
+```
+--- 
+
 Upon installation, the Plugin seamlessly integrates with Filament without any further setup.
 Though the plugin works out-of-the-box, it's designed for customization. Delve into the Configuration section below for detailed customization options.
 
@@ -302,19 +309,6 @@ PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
         ]);
         
 });
-```
-
-### Theming
-By default the plugin uses the default filament theme, but you can customize it by adding the view path into the `content` array of your `panels'` `tailwind.config.js` file:
-
-```php
-export default {
-    content: [
-        // ...
-        './vendor/bezhansalleh/filament-panel-switch/resources/views/panel-switch-menu.blade.php',
-    ],
-    // ...
-}
 ```
 
 ### Panel Exclusion 
