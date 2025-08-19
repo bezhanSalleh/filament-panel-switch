@@ -2,6 +2,17 @@
 
 All notable changes to `filament-panel-switch` will be documented in this file.
 
+## 2.0.0 - 2025-08-19
+
+### What's Changed
+
+* Add support for Filament 4
+* Bump aglipanci/laravel-pint-action from 2.5 to 2.6 by @dependabot[bot] in https://github.com/bezhanSalleh/filament-panel-switch/pull/47
+* Bump stefanzweifel/git-auto-commit-action from 5 to 6 by @dependabot[bot] in https://github.com/bezhanSalleh/filament-panel-switch/pull/45
+* Bump actions/checkout from 4 to 5 by @dependabot[bot] in https://github.com/bezhanSalleh/filament-panel-switch/pull/49
+
+**Full Changelog**: https://github.com/bezhanSalleh/filament-panel-switch/compare/1.1.1...2.0.0
+
 ## 1.1.1 - 2025-05-14
 
 ### What's Changed
