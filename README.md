@@ -1,17 +1,14 @@
 <a href="https://github.com/bezhansalleh/filament-panel-switch" class="filament-hidden">
 
-![Panel Switch](./art/banner.jpg?raw=true "Panel Switch")
+![Panel Switch](https://repository-images.githubusercontent.com/674460446/9c4530cf-420e-4745-a401-0be18d1dd09d "Panel Switch")
 </a>
 
-<p align="left">
-    <a href="https://filamentphp.com/docs/3.x/panels/installation">
-        <img alt="FILAMENT 8.x" src="https://img.shields.io/badge/FILAMENT-3.x-EBB304?style=for-the-badge">
+<p align="center">
+    <a href="https://filamentphp.com/docs/4.x/introduction/overview">
+        <img alt="FILAMENT 4.x" src="https://img.shields.io/badge/FILAMENT-4.x-EBB304?style=for-the-badge">
     </a>
     <a href="https://packagist.org/packages/bezhansalleh/filament-panel-switch">
         <img alt="Packagist" src="https://img.shields.io/packagist/v/bezhansalleh/filament-panel-switch.svg?style=for-the-badge&logo=packagist">
-    </a>
-    <a href="https://github.com/bezhansalleh/filament-panel-switch/actions?query=workflow%3Arun-tests+branch%3A3.x" class="filament-hidden">
-        <img alt="Tests Passing" src="https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-panel-switch/run-tests.yml?style=for-the-badge&logo=github&label=tests">
     </a>
     <a href="https://github.com/bezhansalleh/filament-panel-switch/actions?query=workflow%3A"fix+php+code+styling"+branch%3A3.x" class="filament-hidden">
         <img alt="Code Style Passing" src="https://img.shields.io/github/actions/workflow/status/bezhansalleh/filament-panel-switch/fix-php-code-styling.yml?style=for-the-badge&logo=github&label=code%20style">
@@ -21,6 +18,13 @@
     <img alt="Downloads" src="https://img.shields.io/packagist/dt/bezhansalleh/filament-panel-switch.svg?style=for-the-badge" >
     </a>
 </p>
+
+# Panel Switch
+The Panel Switch Plugin for Filament offers a robust and customizable component for switching between panels in applications built with FilamentPHP.
+    
+![Demo](https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/master/art/modern-icon-demo.gif?raw=true "Modern Icon Demo") 
+![Demo](https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/master/art/modern-image-demo.gif?raw=true "Modern Image Demo") 
+![Demo](https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/master/art/demo.gif?raw=true "Simple Demo") 
 
 <h2 class="filament-hidden">Table Of Contents</h2>
 <ul class="filament-hidden">
@@ -85,20 +89,12 @@
 </li>
 </ul>
 
-
-# Panel Switch
-The Panel Switch Plugin for Filament offers a robust and customizable component for switching between panels in applications built with FilamentPHP.
-    
-![Demo](https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/master/art/modern-icon-demo.gif?raw=true "Modern Icon Demo") 
-![Demo](https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/master/art/modern-image-demo.gif?raw=true "Modern Image Demo") 
-![Demo](https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/master/art/demo.gif?raw=true "Simple Demo") 
-
 #### Compatibility
 
 | Package Version | Filament Version | 
 |----------------|---------------------|
 | [v1](https://github.com/bezhanSalleh/filament-panel-switch/tree/1.x) | [v3](https://filamentphp.com/docs/3.x/panels/installation) |
-| [v2](https://github.com/bezhanSalleh/filament-panel-switch/tree/2.x) | [v4](https://filamentphp.com/docs/4.x/introduction/overview) |
+| v2 | [v4](https://filamentphp.com/docs/4.x/introduction/overview) |
 
 ## Installation
 
