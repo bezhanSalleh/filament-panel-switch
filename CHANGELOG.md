@@ -2,6 +2,17 @@
 
 All notable changes to `filament-panel-switch` will be documented in this file.
 
+## 2.1.0 - 2026-01-19
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.4.0 to 2.5.0 by @dependabot[bot] in https://github.com/bezhanSalleh/filament-panel-switch/pull/55
+* fixed and improved by @bezhanSalleh in https://github.com/bezhanSalleh/filament-panel-switch/pull/56
+* Bump actions/checkout from 5 to 6 by @dependabot[bot] in https://github.com/bezhanSalleh/filament-panel-switch/pull/53
+* Bump stefanzweifel/git-auto-commit-action from 6 to 7 by @dependabot[bot] in https://github.com/bezhanSalleh/filament-panel-switch/pull/52
+
+**Full Changelog**: https://github.com/bezhanSalleh/filament-panel-switch/compare/2.0.0...2.1.0
+
 ## 2.0.0 - 2025-08-19
 
 ### What's Changed
