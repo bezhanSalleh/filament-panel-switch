@@ -19,6 +19,6 @@ class PanelSwitchServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        Filament::serving(fn () => PanelSwitch::boot());
+        Filament::serving(PanelSwitch::boot(...));
     }
 }
