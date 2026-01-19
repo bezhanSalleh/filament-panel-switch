@@ -7,6 +7,9 @@
     <a href="https://filamentphp.com/docs/4.x/introduction/overview">
         <img alt="FILAMENT 4.x" src="https://img.shields.io/badge/FILAMENT-4.x-EBB304?style=for-the-badge">
     </a>
+    <a href="https://filamentphp.com/docs/5.x/introduction/overview">
+        <img alt="FILAMENT 5.x" src="https://img.shields.io/badge/FILAMENT-5.x-EBB304?style=for-the-badge">
+    </a>
     <a href="https://packagist.org/packages/bezhansalleh/filament-panel-switch">
         <img alt="Packagist" src="https://img.shields.io/packagist/v/bezhansalleh/filament-panel-switch.svg?style=for-the-badge&logo=packagist">
     </a>
@@ -93,8 +96,8 @@ The Panel Switch Plugin for Filament offers a robust and customizable component 
 
 | Package Version | Filament Version | 
 |----------------|---------------------|
-| [v1](https://github.com/bezhanSalleh/filament-panel-switch/tree/1.x) | [v3](https://filamentphp.com/docs/3.x/panels/installation) |
-| v2 | [v4](https://filamentphp.com/docs/4.x/introduction/overview) |
+| [1.x](https://github.com/bezhanSalleh/filament-panel-switch/tree/1.x) | [3.x](https://filamentphp.com/docs/3.x/panels/installation) |
+| 2.x | [4.x](https://filamentphp.com/docs/4.x/introduction/overview) & [5.x](https://filamentphp.com/docs/5.x/introduction/overview) |
 
 ## Installation
 

@@ -7,6 +7,7 @@ use Filament\Facades\Filament;
 use Filament\Panel;
 use Filament\Support\Components\Component;
 use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Arr;
 use League\Uri\Uri;
 
@@ -38,7 +39,7 @@ class PanelSwitch extends Component
 
     protected string | Closure $modalHeading = 'Switch Panels';
 
-    protected string $renderHook = 'panels::global-search.before';
+    protected ?string $renderHook = null;
 
     protected ?string $sortOrder = null;
 
@@ -79,8 +80,11 @@ class PanelSwitch extends Component
                     return '';
                 }
 
+                $currentPanel = $static->getCurrentPanel();
+
                 return view('filament-panel-switch::panel-switch-menu', [
-                    'currentPanel' => $static->getCurrentPanel(),
+                    'currentPanel' => $currentPanel,
+                    'hasTopbar' => $currentPanel->hasTopbar(),
                     'heading' => $static->getModalHeading(),
                     'icons' => $static->getIcons(),
                     'iconSize' => $static->getIconSize(),
@@ -305,12 +309,22 @@ class PanelSwitch extends Component
 
     public function getCurrentPanel(): Panel
     {
-        return Filament::getCurrentPanel() ?? Filament::getDefaultPanel();
+        return Filament::getCurrentOrDefaultPanel();
     }
 
     public function getRenderHook(): string
     {
-        return $this->renderHook;
+        if ($this->renderHook !== null) {
+            return $this->renderHook;
+        }
+
+        $currentPanel = $this->getCurrentPanel();
+
+        if ($currentPanel->hasTopbar()) {
+            return PanelsRenderHook::GLOBAL_SEARCH_BEFORE;
+        }
+
+        return PanelsRenderHook::USER_MENU_BEFORE;
     }
 
     public function getRenderIconAsImage(): bool

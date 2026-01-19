@@ -1,105 +1,259 @@
+@php
+    $hasTopbar = $currentPanel->hasTopbar();
+    $isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();
+    $currentLabel = $labels[$currentPanel->getId()] ?? str($currentPanel->getId())->ucfirst();
+    $currentIcon = $icons[$currentPanel->getId()] ?? 'heroicon-o-square-2-stack';
+    $defaultIcon = 'heroicon-o-square-2-stack';
+    $defaultImage = 'https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/3.x/art/banner.jpg';
+@endphp
+
 @if ($isSimple)
-    <x-filament::dropdown teleport placement="bottom-end">
+    {{-- SIMPLE MODE: Dropdown --}}
+    <x-filament::dropdown
+        teleport
+        :placement="$hasTopbar ? 'bottom-end' : 'top-start'"
+    >
         <x-slot name="trigger">
-            <button type="button"
-                class="flex items-center justify-center w-full p-2 text-sm font-medium rounded-lg shadow-sm outline-none group gap-x-3 bg-primary-500">
-                <span class="w-5 h-5 font-semibold bg-white rounded-full shrink-0 text-primary-500">
-                    {{str($labels[$currentPanel->getId()] ?? $currentPanel->getId())->substr(0, 1)->upper()}}
-                </span>
-                <span class="text-white">
-                    {{ $labels[$currentPanel->getId()] ?? str($currentPanel->getId())->ucfirst() }}
-                </span>
-
-                <x-filament::icon
-                    icon="heroicon-m-chevron-down"
-                    icon-alias="panels::panel-switch-simple-icon"
-                    class="w-5 h-5 text-white ms-auto shrink-0"
+            @if ($hasTopbar)
+                {{-- Topbar trigger --}}
+                <x-filament::icon-button
+                    :icon="$currentIcon"
+                    icon-alias="panels::panel-switch-trigger"
+                    icon-size="lg"
+                    :label="$currentLabel"
+                    @class(["bg-gray-100 !rounded-full dark:bg-custom-500/20"])
+                    style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
                 />
+            @else
+                {{-- Sidebar trigger --}}
+                <button
+                    x-data="{ tooltip: false }"
+                    x-effect="
+                        tooltip = $store.sidebar.isOpen
+                            ? false
+                            : {
+                                  content: @js($currentLabel),
+                                  placement: document.dir === 'rtl' ? 'left' : 'right',
+                                  theme: $store.theme,
+                              }
+                    "
+                    x-tooltip.html="tooltip"
+                    type="button"
+                    class="fi-sidebar-database-notifications-btn"
+                >
+                    @if ($renderIconAsImage)
+                        <img
+                            src="{{ $icons[$currentPanel->getId()] ?? $defaultImage }}"
+                            alt="{{ $currentLabel }}"
+                            class="h-6 w-6 shrink-0 rounded-full object-cover"
+                        />
+                    @else
+                        <x-filament::icon
+                            :icon="$currentIcon"
+                            class="h-6 w-6 shrink-0"
+                        />
+                    @endif
 
-            </button>
+                    <span
+                        @if ($isSidebarCollapsibleOnDesktop)
+                            x-show="$store.sidebar.isOpen"
+                            x-transition:enter="fi-transition-enter"
+                            x-transition:enter-start="fi-transition-enter-start"
+                            x-transition:enter-end="fi-transition-enter-end"
+                        @endif
+                        class="fi-sidebar-database-notifications-btn-label"
+                    >
+                        {{ $currentLabel }}
+                    </span>
+
+                    <x-filament::icon
+                        icon="heroicon-m-chevron-up"
+                        @if ($isSidebarCollapsibleOnDesktop)
+                            x-show="$store.sidebar.isOpen"
+                            x-transition:enter="fi-transition-enter"
+                            x-transition:enter-start="fi-transition-enter-start"
+                            x-transition:enter-end="fi-transition-enter-end"
+                        @endif
+                        class="ms-auto h-5 w-5 shrink-0 text-gray-400 dark:text-gray-500"
+                    />
+                </button>
+            @endif
         </x-slot>
 
+        {{-- Dropdown list (shared for both topbar and sidebar) --}}
         <x-filament::dropdown.list>
             @foreach ($panels as $id => $url)
-                <x-filament::dropdown.list.item
-                    :href="$url"
-                    :badge="str($labels[$id] ?? $id)->substr(0, 2)->upper()"
-                    tag="a"
-                >
-                {{ $labels[$id] ?? str($id)->ucfirst() }}
-                </x-filament::dropdown.list.item>
+                @php
+                    $isCurrentPanel = $id === $currentPanel->getId();
+                    $panelLabel = $labels[$id] ?? str($id)->ucfirst();
+                    $panelIcon = $icons[$id] ?? $defaultIcon;
+                @endphp
+
+                @if ($isCurrentPanel)
+                    <x-filament::dropdown.list.item
+                        :icon="$panelIcon"
+                        icon-color="primary"
+                        color="primary"
+                        tag="div"
+                        class="pointer-events-none"
+                    >
+                        <span class="flex items-center justify-between gap-x-2 w-full">
+                            <span class="text-primary-600 dark:text-primary-400">{{ $panelLabel }}</span>
+                            <x-filament::icon
+                                icon="heroicon-m-check"
+                                class="h-4 w-4 text-primary-600 dark:text-primary-400"
+                            />
+                        </span>
+                    </x-filament::dropdown.list.item>
+                @else
+                    <x-filament::dropdown.list.item
+                        :href="$url"
+                        :icon="$panelIcon"
+                        tag="a"
+                    >
+                        {{ $panelLabel }}
+                    </x-filament::dropdown.list.item>
+                @endif
             @endforeach
         </x-filament::dropdown.list>
-
     </x-filament::dropdown>
-@else
-    <style>
-        .panel-switch-modal .fi-modal-content {
-            align-items: center !important;
-            justify-content: center !important;
-        }
-    </style>
-    <x-filament::icon-button
-        x-data="{}"
-        icon="heroicon-s-square-2-stack"
-        icon-alias="panels::panel-switch-modern-icon"
-        icon-size="lg"
-        @click="$dispatch('open-modal', { id: 'panel-switch' })"
-        :label="$heading"
-        @class(["bg-gray-100 !rounded-full dark:bg-custom-500/20"])
-        style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
-    />
 
-    <x-filament::modal
-        id="panel-switch"
-        :width="$modalWidth"
-        alignment="center"
-        :slide-over="$isSlideOver"
-        :sticky-header="$isSlideOver"
-        :heading="$heading"
-        display-classes="block"
-        class="panel-switch-modal"
-    >
-        <div
-            class="flex flex-wrap items-center justify-center gap-4 md:gap-6"
-        >
-            @foreach ($panels as $id => $url)
-                <a
-                    href="{{ $url }}"
-                    class="flex flex-col items-center justify-center flex-1 hover:cursor-pointer group panel-switch-card"
-                >
-                    <div
-                        @class([
-                            "p-2 bg-white rounded-lg shadow-md dark:bg-gray-800 panel-switch-card-section",
-                            "group-hover:ring-2 group-hover:ring-primary-600" => $id !== $currentPanel->getId(),
-                            "ring-2 ring-primary-600" => $id === $currentPanel->getId(),
-                        ])
-                    >
-                        @if ($renderIconAsImage)
-                            <img
-                                class="rounded-lg panel-switch-card-image"
-                                style="width: {{ $iconSize * 4 }}px; height: {{ $iconSize * 4 }}px;"
-                                src="{{ $icons[$id] ?? 'https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/3.x/art/banner.jpg' }}"
-                                alt="Panel Image"
-                            >
-                        @else
-                            @php
-                                $iconName = $icons[$id] ?? 'heroicon-s-square-2-stack' ;
-                            @endphp
-                            @svg($iconName, 'text-primary-600 panel-switch-card-icon', ['style' => 'width: ' . ($iconSize * 4) . 'px; height: ' . ($iconSize * 4). 'px;'])
-                        @endif
-                    </div>
-                    <span
-                        @class([
-                            "mt-2 text-sm font-medium text-center text-gray-400 dark:text-gray-200 break-words panel-switch-card-title",
-                            "text-gray-400 dark:text-gray-200 group-hover:text-primary-600 group-hover:dark:text-primary-400" => $id !== $currentPanel->getId(),
-                            "text-primary-600 dark:text-primary-400" => $id === $currentPanel->getId(),
-                        ])
-                    >
-                        {{ $labels[$id] ?? str($id)->ucfirst() }}
-                    </span>
-                </a>
-            @endforeach
+@else
+    {{-- MODAL MODE --}}
+
+    {{-- CSS for centered modal (non-slideover) --}}
+    @unless ($isSlideOver)
+        <style>
+            .panel-switch-modal .fi-modal-content {
+                align-items: center !important;
+                justify-content: center !important;
+            }
+        </style>
+    @endunless
+
+    @if ($hasTopbar)
+        {{-- Topbar: Icon button trigger with separate modal --}}
+        <div>
+            <x-filament::icon-button
+                x-data="{}"
+                :icon="$currentIcon"
+                icon-alias="panels::panel-switch-trigger"
+                icon-size="lg"
+                @click="$dispatch('open-modal', { id: 'panel-switch' })"
+                :label="$heading"
+                @class(["bg-gray-100 !rounded-full dark:bg-custom-500/20"])
+                style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
+            />
+
+            <x-filament::modal
+                id="panel-switch"
+                :width="$isSlideOver ? 'md' : $modalWidth"
+                :alignment="$isSlideOver ? null : 'center'"
+                :slide-over="$isSlideOver"
+                :sticky-header="$isSlideOver"
+                display-classes="block"
+                :class="$isSlideOver ? '' : 'panel-switch-modal'"
+            >
+                <x-slot name="heading">
+                    {{ $heading }}
+                </x-slot>
+
+                @if ($isSlideOver)
+                    <x-filament-panel-switch::slide-over-list
+                        :panels="$panels"
+                        :current-panel="$currentPanel"
+                        :labels="$labels"
+                        :icons="$icons"
+                        :render-icon-as-image="$renderIconAsImage"
+                    />
+                @else
+                    <x-filament-panel-switch::card-grid
+                        :panels="$panels"
+                        :current-panel="$currentPanel"
+                        :labels="$labels"
+                        :icons="$icons"
+                        :icon-size="$iconSize"
+                        :render-icon-as-image="$renderIconAsImage"
+                    />
+                @endif
+            </x-filament::modal>
         </div>
-    </x-filament::modal>
+    @else
+        {{-- Sidebar: Modal with inline trigger --}}
+        <x-filament::modal
+            id="panel-switch"
+            :slide-over="$isSlideOver"
+            :sticky-header="$isSlideOver"
+            :width="$isSlideOver ? 'md' : $modalWidth"
+            teleport="body"
+            :alignment="$isSlideOver ? null : 'center'"
+            :class="$isSlideOver ? '' : 'panel-switch-modal'"
+        >
+            <x-slot name="trigger">
+                <button
+                    x-data="{ tooltip: false }"
+                    x-effect="
+                        tooltip = $store.sidebar.isOpen
+                            ? false
+                            : {
+                                  content: @js($heading),
+                                  placement: document.dir === 'rtl' ? 'left' : 'right',
+                                  theme: $store.theme,
+                              }
+                    "
+                    x-tooltip.html="tooltip"
+                    type="button"
+                    class="fi-sidebar-database-notifications-btn"
+                >
+                    @if ($renderIconAsImage)
+                        <img
+                            src="{{ $icons[$currentPanel->getId()] ?? $defaultImage }}"
+                            alt="{{ $currentLabel }}"
+                            class="h-6 w-6 shrink-0 rounded-full object-cover"
+                        />
+                    @else
+                        <x-filament::icon
+                            :icon="$currentIcon"
+                            class="h-6 w-6 shrink-0"
+                        />
+                    @endif
+
+                    <span
+                        @if ($isSidebarCollapsibleOnDesktop)
+                            x-show="$store.sidebar.isOpen"
+                            x-transition:enter="fi-transition-enter"
+                            x-transition:enter-start="fi-transition-enter-start"
+                            x-transition:enter-end="fi-transition-enter-end"
+                        @endif
+                        class="fi-sidebar-database-notifications-btn-label"
+                    >
+                        {{ $heading }}
+                    </span>
+                </button>
+            </x-slot>
+
+            <x-slot name="heading">
+                {{ $heading }}
+            </x-slot>
+
+            @if ($isSlideOver)
+                <x-filament-panel-switch::slide-over-list
+                    :panels="$panels"
+                    :current-panel="$currentPanel"
+                    :labels="$labels"
+                    :icons="$icons"
+                    :render-icon-as-image="$renderIconAsImage"
+                />
+            @else
+                <x-filament-panel-switch::card-grid
+                    :panels="$panels"
+                    :current-panel="$currentPanel"
+                    :labels="$labels"
+                    :icons="$icons"
+                    :icon-size="$iconSize"
+                    :render-icon-as-image="$renderIconAsImage"
+                />
+            @endif
+        </x-filament::modal>
+    @endif
 @endif
