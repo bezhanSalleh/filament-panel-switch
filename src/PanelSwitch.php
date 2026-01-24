@@ -278,6 +278,15 @@ class PanelSwitch extends Component
 
         return collect(Filament::getPanels())
             ->reject(fn (Panel $panel) => in_array($panel->getId(), $this->getExcludes()))
+            ->reject(function (Panel $panel) {
+                $user = auth()->user();
+
+                if ($user && method_exists($user, 'canAccessPanel')) {
+                    return ! $user->canAccessPanel($panel);
+                }
+
+                return false;
+            })
             ->when(
                 value: filled($panelIds),
                 callback: function ($panelCollection) use ($panelIds) {
