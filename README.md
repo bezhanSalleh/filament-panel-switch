@@ -50,6 +50,9 @@ The Panel Switch Plugin for Filament offers a robust and customizable component 
 <a href="#iconsimages">Icons/Images</a>
 </li>
 <li>
+<a href="#dark-mode-icons">Dark Mode Icons</a>
+</li>
+<li>
 <a href="#iconimage-size">Icon/Image Size</a>
 </li>
 <li>
@@ -213,6 +216,46 @@ PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
     ], $asImage = true);
 });
 ```
+
+### Dark Mode Icons
+You can set separate icons for dark mode using the `darkIcons()` method. This is useful when your light mode icons don't look good in dark mode (or vice versa). The method mirrors the `icons()` API and has its own independent `$asImage` flag, so light icons can be SVGs while dark icons are images, or any combination.
+
+```php
+use BezhanSalleh\PanelSwitch\PanelSwitch;
+
+PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
+    $panelSwitch
+        ->icons([
+            'admin' => 'heroicon-o-square-2-stack',
+            'app' => 'heroicon-o-star',
+        ])
+        ->darkIcons([
+            'admin' => 'heroicon-s-square-2-stack',
+            'app' => 'heroicon-s-star',
+        ]);
+});
+```
+
+You can also mix SVG icons and images between light and dark mode:
+
+```php
+use BezhanSalleh\PanelSwitch\PanelSwitch;
+
+PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
+    $panelSwitch
+        ->icons([
+            'admin' => 'heroicon-o-square-2-stack',
+            'app' => 'heroicon-o-star',
+        ])
+        ->darkIcons([
+            'admin' => 'https://example.com/admin-dark-logo.png',
+            'app' => 'https://example.com/app-dark-logo.png',
+        ], $asImage = true);
+});
+```
+
+> [!NOTE]
+> If `darkIcons()` is not called, the regular icons will be used in both light and dark mode. You only need to provide dark icon entries for panels that require a different icon in dark mode — panels without a dark icon entry will fall back to their regular icon.
 
 ### Icon/Image Size
 Use the `iconSize()` method to set the size of the icons/images. The default size is `128px`. The value provided will be multiplied by 4 and then used as the size of the icon/image.

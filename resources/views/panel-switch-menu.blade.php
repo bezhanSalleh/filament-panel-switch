@@ -3,9 +3,19 @@
     $isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();
     $currentLabel = $labels[$currentPanel->getId()] ?? str($currentPanel->getId())->ucfirst();
     $currentIcon = $icons[$currentPanel->getId()] ?? 'heroicon-o-square-2-stack';
+    $currentDarkIcon = $darkIcons[$currentPanel->getId()] ?? null;
     $defaultIcon = 'heroicon-o-square-2-stack';
     $defaultImage = 'https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/3.x/art/banner.jpg';
 @endphp
+
+@once
+    <style>
+        html.dark .fi-panel-switch-light,
+        html:not(.dark) .fi-panel-switch-dark {
+            display: none !important;
+        }
+    </style>
+@endonce
 
 @if ($isSimple)
     {{-- SIMPLE MODE: Dropdown --}}
@@ -16,14 +26,37 @@
         <x-slot name="trigger">
             @if ($hasTopbar)
                 {{-- Topbar trigger --}}
-                <x-filament::icon-button
-                    :icon="$currentIcon"
-                    icon-alias="panels::panel-switch-trigger"
-                    icon-size="lg"
-                    :label="$currentLabel"
-                    @class(["bg-gray-100 !rounded-full dark:bg-custom-500/20"])
-                    style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
-                />
+                @if ($currentDarkIcon)
+                    <div class="fi-panel-switch-light">
+                        <x-filament::icon-button
+                            :icon="$currentIcon"
+                            icon-alias="panels::panel-switch-trigger"
+                            icon-size="lg"
+                            :label="$currentLabel"
+                            @class(["bg-gray-100 !rounded-full dark:bg-custom-500/20"])
+                            style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
+                        />
+                    </div>
+                    <div class="fi-panel-switch-dark">
+                        <x-filament::icon-button
+                            :icon="$currentDarkIcon"
+                            icon-alias="panels::panel-switch-trigger"
+                            icon-size="lg"
+                            :label="$currentLabel"
+                            @class(["bg-gray-100 !rounded-full dark:bg-custom-500/20"])
+                            style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
+                        />
+                    </div>
+                @else
+                    <x-filament::icon-button
+                        :icon="$currentIcon"
+                        icon-alias="panels::panel-switch-trigger"
+                        icon-size="lg"
+                        :label="$currentLabel"
+                        @class(["bg-gray-100 !rounded-full dark:bg-custom-500/20"])
+                        style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
+                    />
+                @endif
             @else
                 {{-- Sidebar trigger --}}
                 <button
@@ -41,17 +74,49 @@
                     type="button"
                     class="fi-sidebar-database-notifications-btn"
                 >
-                    @if ($renderIconAsImage)
-                        <img
-                            src="{{ $icons[$currentPanel->getId()] ?? $defaultImage }}"
-                            alt="{{ $currentLabel }}"
-                            class="h-6 w-6 shrink-0 rounded-full object-cover"
-                        />
+                    @if ($currentDarkIcon)
+                        <span class="fi-panel-switch-light">
+                            @if ($renderIconAsImage)
+                                <img
+                                    src="{{ $icons[$currentPanel->getId()] ?? $defaultImage }}"
+                                    alt="{{ $currentLabel }}"
+                                    class="h-6 w-6 shrink-0 rounded-full object-cover"
+                                />
+                            @else
+                                <x-filament::icon
+                                    :icon="$currentIcon"
+                                    class="h-6 w-6 shrink-0"
+                                />
+                            @endif
+                        </span>
+
+                        <span class="fi-panel-switch-dark">
+                            @if ($renderDarkIconAsImage)
+                                <img
+                                    src="{{ $darkIcons[$currentPanel->getId()] }}"
+                                    alt="{{ $currentLabel }}"
+                                    class="h-6 w-6 shrink-0 rounded-full object-cover"
+                                />
+                            @else
+                                <x-filament::icon
+                                    :icon="$currentDarkIcon"
+                                    class="h-6 w-6 shrink-0"
+                                />
+                            @endif
+                        </span>
                     @else
-                        <x-filament::icon
-                            :icon="$currentIcon"
-                            class="h-6 w-6 shrink-0"
-                        />
+                        @if ($renderIconAsImage)
+                            <img
+                                src="{{ $icons[$currentPanel->getId()] ?? $defaultImage }}"
+                                alt="{{ $currentLabel }}"
+                                class="h-6 w-6 shrink-0 rounded-full object-cover"
+                            />
+                        @else
+                            <x-filament::icon
+                                :icon="$currentIcon"
+                                class="h-6 w-6 shrink-0"
+                            />
+                        @endif
                     @endif
 
                     <span
@@ -87,32 +152,91 @@
                     $isCurrentPanel = $id === $currentPanel->getId();
                     $panelLabel = $labels[$id] ?? str($id)->ucfirst();
                     $panelIcon = $icons[$id] ?? $defaultIcon;
+                    $panelDarkIcon = $darkIcons[$id] ?? null;
                 @endphp
 
-                @if ($isCurrentPanel)
-                    <x-filament::dropdown.list.item
-                        :icon="$panelIcon"
-                        icon-color="primary"
-                        color="primary"
-                        tag="div"
-                        class="pointer-events-none"
-                    >
-                        <span class="flex items-center justify-between gap-x-2 w-full">
-                            <span class="text-primary-600 dark:text-primary-400">{{ $panelLabel }}</span>
-                            <x-filament::icon
-                                icon="heroicon-m-check"
-                                class="h-4 w-4 text-primary-600 dark:text-primary-400"
-                            />
-                        </span>
-                    </x-filament::dropdown.list.item>
+                @if ($panelDarkIcon)
+                    @if ($isCurrentPanel)
+                        <div class="fi-panel-switch-light">
+                            <x-filament::dropdown.list.item
+                                :icon="$panelIcon"
+                                icon-color="primary"
+                                color="primary"
+                                tag="div"
+                                class="pointer-events-none"
+                            >
+                                <span class="flex items-center justify-between gap-x-2 w-full">
+                                    <span class="text-primary-600 dark:text-primary-400">{{ $panelLabel }}</span>
+                                    <x-filament::icon
+                                        icon="heroicon-m-check"
+                                        class="h-4 w-4 text-primary-600 dark:text-primary-400"
+                                    />
+                                </span>
+                            </x-filament::dropdown.list.item>
+                        </div>
+                        <div class="fi-panel-switch-dark">
+                            <x-filament::dropdown.list.item
+                                :icon="$panelDarkIcon"
+                                icon-color="primary"
+                                color="primary"
+                                tag="div"
+                                class="pointer-events-none"
+                            >
+                                <span class="flex items-center justify-between gap-x-2 w-full">
+                                    <span class="text-primary-600 dark:text-primary-400">{{ $panelLabel }}</span>
+                                    <x-filament::icon
+                                        icon="heroicon-m-check"
+                                        class="h-4 w-4 text-primary-600 dark:text-primary-400"
+                                    />
+                                </span>
+                            </x-filament::dropdown.list.item>
+                        </div>
+                    @else
+                        <div class="fi-panel-switch-light">
+                            <x-filament::dropdown.list.item
+                                :href="$url"
+                                :icon="$panelIcon"
+                                tag="a"
+                            >
+                                {{ $panelLabel }}
+                            </x-filament::dropdown.list.item>
+                        </div>
+                        <div class="fi-panel-switch-dark">
+                            <x-filament::dropdown.list.item
+                                :href="$url"
+                                :icon="$panelDarkIcon"
+                                tag="a"
+                            >
+                                {{ $panelLabel }}
+                            </x-filament::dropdown.list.item>
+                        </div>
+                    @endif
                 @else
-                    <x-filament::dropdown.list.item
-                        :href="$url"
-                        :icon="$panelIcon"
-                        tag="a"
-                    >
-                        {{ $panelLabel }}
-                    </x-filament::dropdown.list.item>
+                    @if ($isCurrentPanel)
+                        <x-filament::dropdown.list.item
+                            :icon="$panelIcon"
+                            icon-color="primary"
+                            color="primary"
+                            tag="div"
+                            class="pointer-events-none"
+                        >
+                            <span class="flex items-center justify-between gap-x-2 w-full">
+                                <span class="text-primary-600 dark:text-primary-400">{{ $panelLabel }}</span>
+                                <x-filament::icon
+                                    icon="heroicon-m-check"
+                                    class="h-4 w-4 text-primary-600 dark:text-primary-400"
+                                />
+                            </span>
+                        </x-filament::dropdown.list.item>
+                    @else
+                        <x-filament::dropdown.list.item
+                            :href="$url"
+                            :icon="$panelIcon"
+                            tag="a"
+                        >
+                            {{ $panelLabel }}
+                        </x-filament::dropdown.list.item>
+                    @endif
                 @endif
             @endforeach
         </x-filament::dropdown.list>
@@ -134,16 +258,43 @@
     @if ($hasTopbar)
         {{-- Topbar: Icon button trigger with separate modal --}}
         <div>
-            <x-filament::icon-button
-                x-data="{}"
-                :icon="$currentIcon"
-                icon-alias="panels::panel-switch-trigger"
-                icon-size="lg"
-                @click="$dispatch('open-modal', { id: 'panel-switch' })"
-                :label="$heading"
-                @class(["bg-gray-100 !rounded-full dark:bg-custom-500/20"])
-                style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
-            />
+            @if ($currentDarkIcon)
+                <div class="fi-panel-switch-light">
+                    <x-filament::icon-button
+                        x-data="{}"
+                        :icon="$currentIcon"
+                        icon-alias="panels::panel-switch-trigger"
+                        icon-size="lg"
+                        @click="$dispatch('open-modal', { id: 'panel-switch' })"
+                        :label="$heading"
+                        @class(["bg-gray-100 !rounded-full dark:bg-custom-500/20"])
+                        style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
+                    />
+                </div>
+                <div class="fi-panel-switch-dark">
+                    <x-filament::icon-button
+                        x-data="{}"
+                        :icon="$currentDarkIcon"
+                        icon-alias="panels::panel-switch-trigger"
+                        icon-size="lg"
+                        @click="$dispatch('open-modal', { id: 'panel-switch' })"
+                        :label="$heading"
+                        @class(["bg-gray-100 !rounded-full dark:bg-custom-500/20"])
+                        style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
+                    />
+                </div>
+            @else
+                <x-filament::icon-button
+                    x-data="{}"
+                    :icon="$currentIcon"
+                    icon-alias="panels::panel-switch-trigger"
+                    icon-size="lg"
+                    @click="$dispatch('open-modal', { id: 'panel-switch' })"
+                    :label="$heading"
+                    @class(["bg-gray-100 !rounded-full dark:bg-custom-500/20"])
+                    style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
+                />
+            @endif
 
             <x-filament::modal
                 id="panel-switch"
@@ -164,7 +315,9 @@
                         :current-panel="$currentPanel"
                         :labels="$labels"
                         :icons="$icons"
+                        :dark-icons="$darkIcons"
                         :render-icon-as-image="$renderIconAsImage"
+                        :render-dark-icon-as-image="$renderDarkIconAsImage"
                     />
                 @else
                     <x-filament-panel-switch::card-grid
@@ -172,8 +325,10 @@
                         :current-panel="$currentPanel"
                         :labels="$labels"
                         :icons="$icons"
+                        :dark-icons="$darkIcons"
                         :icon-size="$iconSize"
                         :render-icon-as-image="$renderIconAsImage"
+                        :render-dark-icon-as-image="$renderDarkIconAsImage"
                     />
                 @endif
             </x-filament::modal>
@@ -205,17 +360,49 @@
                     type="button"
                     class="fi-sidebar-database-notifications-btn"
                 >
-                    @if ($renderIconAsImage)
-                        <img
-                            src="{{ $icons[$currentPanel->getId()] ?? $defaultImage }}"
-                            alt="{{ $currentLabel }}"
-                            class="h-6 w-6 shrink-0 rounded-full object-cover"
-                        />
+                    @if ($currentDarkIcon)
+                        <span class="fi-panel-switch-light">
+                            @if ($renderIconAsImage)
+                                <img
+                                    src="{{ $icons[$currentPanel->getId()] ?? $defaultImage }}"
+                                    alt="{{ $currentLabel }}"
+                                    class="h-6 w-6 shrink-0 rounded-full object-cover"
+                                />
+                            @else
+                                <x-filament::icon
+                                    :icon="$currentIcon"
+                                    class="h-6 w-6 shrink-0"
+                                />
+                            @endif
+                        </span>
+
+                        <span class="fi-panel-switch-dark">
+                            @if ($renderDarkIconAsImage)
+                                <img
+                                    src="{{ $darkIcons[$currentPanel->getId()] }}"
+                                    alt="{{ $currentLabel }}"
+                                    class="h-6 w-6 shrink-0 rounded-full object-cover"
+                                />
+                            @else
+                                <x-filament::icon
+                                    :icon="$currentDarkIcon"
+                                    class="h-6 w-6 shrink-0"
+                                />
+                            @endif
+                        </span>
                     @else
-                        <x-filament::icon
-                            :icon="$currentIcon"
-                            class="h-6 w-6 shrink-0"
-                        />
+                        @if ($renderIconAsImage)
+                            <img
+                                src="{{ $icons[$currentPanel->getId()] ?? $defaultImage }}"
+                                alt="{{ $currentLabel }}"
+                                class="h-6 w-6 shrink-0 rounded-full object-cover"
+                            />
+                        @else
+                            <x-filament::icon
+                                :icon="$currentIcon"
+                                class="h-6 w-6 shrink-0"
+                            />
+                        @endif
                     @endif
 
                     <span
@@ -242,7 +429,9 @@
                     :current-panel="$currentPanel"
                     :labels="$labels"
                     :icons="$icons"
+                    :dark-icons="$darkIcons"
                     :render-icon-as-image="$renderIconAsImage"
+                    :render-dark-icon-as-image="$renderDarkIconAsImage"
                 />
             @else
                 <x-filament-panel-switch::card-grid
@@ -250,8 +439,10 @@
                     :current-panel="$currentPanel"
                     :labels="$labels"
                     :icons="$icons"
+                    :dark-icons="$darkIcons"
                     :icon-size="$iconSize"
                     :render-icon-as-image="$renderIconAsImage"
+                    :render-dark-icon-as-image="$renderDarkIconAsImage"
                 />
             @endif
         </x-filament::modal>

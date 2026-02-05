@@ -3,8 +3,10 @@
     'currentPanel',
     'labels' => [],
     'icons' => [],
+    'darkIcons' => [],
     'iconSize' => 32,
     'renderIconAsImage' => false,
+    'renderDarkIconAsImage' => false,
 ])
 
 @php
@@ -18,6 +20,7 @@
             $isCurrentPanel = $id === $currentPanel->getId();
             $panelLabel = $labels[$id] ?? str($id)->ucfirst();
             $panelIcon = $icons[$id] ?? $defaultIcon;
+            $darkPanelIcon = $darkIcons[$id] ?? null;
         @endphp
 
         <a
@@ -31,15 +34,47 @@
                     "ring-2 ring-primary-600" => $isCurrentPanel,
                 ])
             >
-                @if ($renderIconAsImage)
-                    <img
-                        class="rounded-lg panel-switch-card-image"
-                        style="width: {{ $iconSize * 4 }}px; height: {{ $iconSize * 4 }}px;"
-                        src="{{ $icons[$id] ?? $defaultImage }}"
-                        alt="{{ $panelLabel }}"
-                    >
+                @if ($darkPanelIcon)
+                    @if ($renderIconAsImage)
+                        <span class="fi-panel-switch-light">
+                            <img
+                                class="rounded-lg panel-switch-card-image"
+                                style="width: {{ $iconSize * 4 }}px; height: {{ $iconSize * 4 }}px;"
+                                src="{{ $icons[$id] ?? $defaultImage }}"
+                                alt="{{ $panelLabel }}"
+                            >
+                        </span>
+                    @else
+                        <span class="fi-panel-switch-light">
+                            @svg($panelIcon, 'text-primary-600 panel-switch-card-icon', ['style' => 'width: ' . ($iconSize * 4) . 'px; height: ' . ($iconSize * 4). 'px;'])
+                        </span>
+                    @endif
+
+                    @if ($renderDarkIconAsImage)
+                        <span class="fi-panel-switch-dark">
+                            <img
+                                class="rounded-lg panel-switch-card-image"
+                                style="width: {{ $iconSize * 4 }}px; height: {{ $iconSize * 4 }}px;"
+                                src="{{ $darkPanelIcon }}"
+                                alt="{{ $panelLabel }}"
+                            >
+                        </span>
+                    @else
+                        <span class="fi-panel-switch-dark">
+                            @svg($darkPanelIcon, 'text-primary-600 panel-switch-card-icon', ['style' => 'width: ' . ($iconSize * 4) . 'px; height: ' . ($iconSize * 4). 'px;'])
+                        </span>
+                    @endif
                 @else
-                    @svg($panelIcon, 'text-primary-600 panel-switch-card-icon', ['style' => 'width: ' . ($iconSize * 4) . 'px; height: ' . ($iconSize * 4). 'px;'])
+                    @if ($renderIconAsImage)
+                        <img
+                            class="rounded-lg panel-switch-card-image"
+                            style="width: {{ $iconSize * 4 }}px; height: {{ $iconSize * 4 }}px;"
+                            src="{{ $icons[$id] ?? $defaultImage }}"
+                            alt="{{ $panelLabel }}"
+                        >
+                    @else
+                        @svg($panelIcon, 'text-primary-600 panel-switch-card-icon', ['style' => 'width: ' . ($iconSize * 4) . 'px; height: ' . ($iconSize * 4). 'px;'])
+                    @endif
                 @endif
             </div>
             <span

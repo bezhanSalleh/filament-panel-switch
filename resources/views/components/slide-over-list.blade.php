@@ -3,7 +3,9 @@
     'currentPanel',
     'labels' => [],
     'icons' => [],
+    'darkIcons' => [],
     'renderIconAsImage' => false,
+    'renderDarkIconAsImage' => false,
 ])
 
 @php
@@ -17,6 +19,7 @@
             $isCurrentPanel = $id === $currentPanel->getId();
             $panelLabel = $labels[$id] ?? str($id)->ucfirst();
             $panelIcon = $icons[$id] ?? $defaultIcon;
+            $darkPanelIcon = $darkIcons[$id] ?? null;
         @endphp
 
         <li>
@@ -29,21 +32,61 @@
                 ])
             >
                 {{-- Icon --}}
-                @if ($renderIconAsImage)
-                    <img
-                        class="h-10 w-10 shrink-0 rounded-lg object-cover"
-                        src="{{ $icons[$id] ?? $defaultImage }}"
-                        alt="{{ $panelLabel }}"
-                    >
+                @if ($darkPanelIcon)
+                    <span class="fi-panel-switch-light">
+                        @if ($renderIconAsImage)
+                            <img
+                                class="h-10 w-10 shrink-0 rounded-lg object-cover"
+                                src="{{ $icons[$id] ?? $defaultImage }}"
+                                alt="{{ $panelLabel }}"
+                            >
+                        @else
+                            <x-filament::icon
+                                :icon="$panelIcon"
+                                @class([
+                                    "h-6 w-6 shrink-0",
+                                    "text-gray-400" => ! $isCurrentPanel,
+                                    "text-primary-600" => $isCurrentPanel,
+                                ])
+                            />
+                        @endif
+                    </span>
+
+                    <span class="fi-panel-switch-dark">
+                        @if ($renderDarkIconAsImage)
+                            <img
+                                class="h-10 w-10 shrink-0 rounded-lg object-cover"
+                                src="{{ $darkPanelIcon }}"
+                                alt="{{ $panelLabel }}"
+                            >
+                        @else
+                            <x-filament::icon
+                                :icon="$darkPanelIcon"
+                                @class([
+                                    "h-6 w-6 shrink-0",
+                                    "text-gray-500" => ! $isCurrentPanel,
+                                    "text-primary-400" => $isCurrentPanel,
+                                ])
+                            />
+                        @endif
+                    </span>
                 @else
-                    <x-filament::icon
-                        :icon="$panelIcon"
-                        @class([
-                            "h-6 w-6 shrink-0",
-                            "text-gray-400 dark:text-gray-500" => ! $isCurrentPanel,
-                            "text-primary-600 dark:text-primary-400" => $isCurrentPanel,
-                        ])
-                    />
+                    @if ($renderIconAsImage)
+                        <img
+                            class="h-10 w-10 shrink-0 rounded-lg object-cover"
+                            src="{{ $icons[$id] ?? $defaultImage }}"
+                            alt="{{ $panelLabel }}"
+                        >
+                    @else
+                        <x-filament::icon
+                            :icon="$panelIcon"
+                            @class([
+                                "h-6 w-6 shrink-0",
+                                "text-gray-400 dark:text-gray-500" => ! $isCurrentPanel,
+                                "text-primary-600 dark:text-primary-400" => $isCurrentPanel,
+                            ])
+                        />
+                    @endif
                 @endif
 
                 {{-- Label --}}

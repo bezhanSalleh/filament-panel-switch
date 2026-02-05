@@ -29,6 +29,8 @@ class PanelSwitch extends Component
 
     protected array | Closure $icons = [];
 
+    protected array | Closure $darkIcons = [];
+
     protected int | Closure | null $iconSize = null;
 
     protected array | Closure $labels = [];
@@ -36,6 +38,8 @@ class PanelSwitch extends Component
     protected array | Closure | null $panels = null;
 
     protected bool $renderIconAsImage = false;
+
+    protected bool $renderDarkIconAsImage = false;
 
     protected string | Closure $modalHeading = 'Switch Panels';
 
@@ -84,6 +88,7 @@ class PanelSwitch extends Component
 
                 return view('filament-panel-switch::panel-switch-menu', [
                     'currentPanel' => $currentPanel,
+                    'darkIcons' => $static->getDarkIcons(),
                     'hasTopbar' => $currentPanel->hasTopbar(),
                     'heading' => $static->getModalHeading(),
                     'icons' => $static->getIcons(),
@@ -93,6 +98,7 @@ class PanelSwitch extends Component
                     'labels' => $static->getLabels(),
                     'modalWidth' => $static->getModalWidth(),
                     'panels' => $static->getPanels(),
+                    'renderDarkIconAsImage' => $static->getRenderDarkIconAsImage(),
                     'renderIconAsImage' => $static->getRenderIconAsImage(),
                 ]);
             },
@@ -136,6 +142,22 @@ class PanelSwitch extends Component
         $this->renderIconAsImage = $asImage;
 
         $this->icons = $icons;
+
+        return $this;
+    }
+
+    public function darkIcons(array | Closure $icons, bool $asImage = false): static
+    {
+        if ($asImage) {
+            foreach ($icons as $key => $icon) {
+                if (! str($icon)->startsWith(['http://', 'https://'])) {
+                    throw new \Exception('All icons must be URLs when $asImage is true.');
+                }
+            }
+        }
+
+        $this->renderDarkIconAsImage = $asImage;
+        $this->darkIcons = $icons;
 
         return $this;
     }
@@ -222,6 +244,16 @@ class PanelSwitch extends Component
     public function getIcons(): array
     {
         return (array) $this->evaluate($this->icons);
+    }
+
+    public function getDarkIcons(): array
+    {
+        return (array) $this->evaluate($this->darkIcons);
+    }
+
+    public function getRenderDarkIconAsImage(): bool
+    {
+        return $this->renderDarkIconAsImage;
     }
 
     public function getIconSize(): int
