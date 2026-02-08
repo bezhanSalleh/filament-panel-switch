@@ -87,7 +87,8 @@ The Panel Switch Plugin for Filament offers a robust and customizable component 
 | Package Version | Filament Version | 
 |----------------|---------------------|
 | [1.x](https://github.com/bezhanSalleh/filament-panel-switch/tree/1.x) | [3.x](https://filamentphp.com/docs/3.x/panels/installation) |
-| 2.x | [4.x](https://filamentphp.com/docs/4.x/introduction/overview) & [5.x](https://filamentphp.com/docs/5.x/introduction/overview) |
+| [2.x](https://github.com/bezhanSalleh/filament-panel-switch/tree/2.x) | [4.x](https://filamentphp.com/docs/4.x/introduction/overview) & [5.x](https://filamentphp.com/docs/5.x/introduction/overview) |
+| 3.x - current | [4.x](https://filamentphp.com/docs/4.x/introduction/overview) & [5.x](https://filamentphp.com/docs/5.x/introduction/overview) |
 
 ## Installation
 
