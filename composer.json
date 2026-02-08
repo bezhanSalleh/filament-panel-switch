@@ -45,7 +45,7 @@
         }
     },
     "scripts": {
-        "format": "vendor/bin/pint"
+        "lint": "pint"
     },
     "config": {
         "sort-packages": true
