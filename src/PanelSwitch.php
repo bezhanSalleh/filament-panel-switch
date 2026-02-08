@@ -204,7 +204,7 @@ class PanelSwitch extends Component
     {
         $user = auth()?->user();
 
-        if (blank($user )) {
+        if (blank($user)) {
             return false;
         }
 
