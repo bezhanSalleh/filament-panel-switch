@@ -2,6 +2,25 @@
 
 All notable changes to `filament-panel-switch` will be documented in this file.
 
+## 3.0.0 - 2026-02-08
+
+### What's Changed
+
+##### Enhances Panel access, adds dark icons support and removes deprecated APIs
+
+- Adds darkIcons() configuration for theme-aware panel icons - idea by StanMenten99
+- Components refactored and optimized to eliminate duplication
+- Enhanced and refactored panel access filtering into getPanels() via new canUserAccessPanel() method - idea by Yismen
+- Removed
+  - excludes()
+  - visible()
+  - and canSwitchPanels()
+  
+
+* 3.x by @bezhanSalleh in https://github.com/bezhanSalleh/filament-panel-switch/pull/60
+
+**Full Changelog**: https://github.com/bezhanSalleh/filament-panel-switch/compare/2.1.0...3.0.0
+
 ## 2.1.0 - 2026-01-19
 
 ### What's Changed
