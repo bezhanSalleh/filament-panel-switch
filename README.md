@@ -41,35 +41,25 @@ The Panel Switch Plugin for Filament offers a robust and customizable component 
 <a href="#configuration">Configuration</a>
 <ul>
 <li>
+<a href="#panel-access--navigation">Panel Access & Navigation</a>
+</li>
+<li>
 <a href="#design-or-style">Design or Style</a>
 </li>
 <li>
 <a href="#labels">Labels</a>
 </li>
 <li>
-<a href="#iconsimages">Icons/Images</a>
+<a href="#icons">Icons</a>
 </li>
 <li>
-<a href="#iconimage-size">Icon/Image Size</a>
-</li>
-<li>
-<a href="#visibility">Visibility</a>
-</li>
-<li>
-<a href="#who-can-switch-panels">Who Can Switch Panels?</a>
-</li>
-<li>
-<a href="#panels">Panel [New 1.0.7]</a>
-</li>
-<a href="#sort-order">Sort Order [New 1.0.7]</a>
+<a href="#sort-order">Sort Order</a>
 </li>
 <li>
 <a href="#placement">Placement</a>
 </li>
 <li>
-<a href="#usage">Usage</a>
-</li>
-<a href="#panel-exclusion">Panel Exclusion [@deprecated]</a>
+<a href="#full-example">Full Example</a>
 </li>
 </ul>
 </li>
@@ -132,130 +122,10 @@ PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
     // Custom configurations go here
 });
 ```
-### Design or Style
-By default, the Plugin uses Filament's [Modal Blade component](https://filamentphp.com/docs/3.x/support/blade-components/modal) as the modern design for the panel switch menu. But you can change it to the simple design by using the `simple()` method.
+### Panel Access & Navigation
+The panel switch is automatically visible when the authenticated user has access to two or more panels. Panel access is determined via the `canAccessPanel` method on your User model — no additional configuration needed. Panels the user cannot access are automatically hidden from the switch.
 
-- #### Modern
-    - ##### Modal Heading
-      Set a custom Modal Heading for the Panel Switcher. By default, the modal heading is set to `Switch Panels`.
-      ```php
-          use BezhanSalleh\PanelSwitch\PanelSwitch;
-
-          PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
-              $panelSwitch->modalHeading('Available Panels');
-          });
-      ```
-    - ##### Modal Width
-      By default, the modal width is set to `screen` but you can use the options avaialbel for [Modal Blade component](https://filamentphp.com/docs/3.x/support/blade-components/modal#changing-the-modal-width).
-      ```php
-          use BezhanSalleh\PanelSwitch\PanelSwitch;
-
-          PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
-              $panelSwitch->modalWidth('sm');
-          });
-      ```
-    - ##### Slide-Over
-      You can use the `slideOver()` method to open a `slide-over` dialog instead of the modal.
-        ```php
-            use BezhanSalleh\PanelSwitch\PanelSwitch;
-        
-            PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
-                $panelSwitch->slideOver();
-            });
-        ```
-- #### Simple
-  The `simple()` method transforms the panel switch menu to a dropdown list, allowing users to switch between panels directly from the list.
-    ```php
-        use BezhanSalleh\PanelSwitch\PanelSwitch;
-    
-        PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
-            $panelSwitch->simple();
-        });
-    ``` 
-### Labels
-By using `labels()` method you can provide textual representation for each panel. The keys of the array should be valid panel IDs, and the values can be either regular strings or Laravel's translatable strings:
-
-```php
-use BezhanSalleh\PanelSwitch\PanelSwitch;
-
-PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
-    $panelSwitch
-        ->labels([
-            'admin' => 'Custom Admin Label',
-            'general_manager' => __('General Manager')
-        ]);
-});
-```
-
-### Icons/Images
-Define icons/images for available panels using the `icons()` method which accepts an array. The keys of the array should be valid panel IDs. If using images instead of icons, set the `$asImage` parameter to `true` and the value of the array should be the path to the image meaning a valid url:
-
-- **Icons**
-```php
-use BezhanSalleh\PanelSwitch\PanelSwitch;
-
-PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {    
-    $panelSwitch->icons([
-        'validPanelId1' => 'heroicon-o-square-2-stack',
-        'validPanelId2' => 'heroicon-o-star',
-    ], $asImage = false);
-});
-```
-
-- **Images**
-```php
-use BezhanSalleh\PanelSwitch\PanelSwitch;
-
-PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {    
-    $panelSwitch->icons([
-        'validPanelId1' => 'https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/3.x/art/banner.jpg',
-        'validPanelId2' => 'https://raw.githubusercontent.com/bezhanSalleh/filament-panel-switch/3.x/art/banner.jpg',
-    ], $asImage = true);
-});
-```
-
-### Icon/Image Size
-Use the `iconSize()` method to set the size of the icons/images. The default size is `128px`. The value provided will be multiplied by 4 and then used as the size of the icon/image.
-
-```php
-use BezhanSalleh\PanelSwitch\PanelSwitch;
-
-PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {   
-    // This would result in an icon/image size of 128 pixels.
-    $panelSwitch->iconSize(32);  
-});
-```
-
-### Visibility
-By default, the package checks whether the user can access the panel if so the switch will be visible. You can further customize whether the panel switch should be shown.
-
-```php
-use BezhanSalleh\PanelSwitch\PanelSwitch;
-
-PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) { 
-    $panelSwitch
-        ->visible(fn (): bool => auth()->user()?->hasAnyRole([
-            'admin',
-            'general_manager',
-            'super_admin',
-        ]));
-});
-```
-
-### Who Can Switch Panels?
-You might want an option in a situation where you want a group of your users to see the panel but not be able to switch panels. You can do that by using the `canSwitchPanels()` method.
-
-```php
-use BezhanSalleh\PanelSwitch\PanelSwitch;
-
-PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
-    $panelSwitch
-        ->canSwitchPanels(fn (): bool => auth()->user()?->can('switch_panels'));
-});
-```
-
-### Panels
-By default all the panels available will be listed in the panel switch menu. But by providing an array of panel ids to the `panels()` method you can limit the panels that will be listed. 
+To further limit which panels appear in the switch, use the `panels()` method:
 
 ```php
 PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
@@ -266,34 +136,102 @@ PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
     ]);
 });
 ```
-Then `panels()` method also accepts a closure that returns an array of panel ids. This is useful when you want to dynamically determine the panels that will be listed. The plugin will also validate the panels to ensure that they are valid filament panels. If any of the panels provided are invalid, the plugin will throw an `InvalidArgumentException`.
+The `panels()` method also accepts a closure that returns an array of panel ids. This is useful when you want to dynamically determine the panels that will be listed. The plugin will also validate the panels to ensure that they are valid filament panels. If any of the panels provided are invalid, the plugin will throw an `InvalidArgumentException`.
 
-### Sort Order
-By default the panels will be listed in the order they were registered in `config/app.php`'s `providers` array or in the order they are provided through the `panels()` method. But you can opt-in to sort the panels either in `asc` or `desc` order via `sort()` method. 
+### Design or Style
+The plugin supports two design styles:
+
+- **Modern** (default) — Uses Filament's [Modal Blade component](https://filamentphp.com/docs/3.x/support/blade-components/modal). You can customize the modal heading, [width](https://filamentphp.com/docs/3.x/support/blade-components/modal#changing-the-modal-width), or use a slide-over:
+
+    ```php
+    PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
+        $panelSwitch
+            ->modalHeading('Available Panels')
+            ->modalWidth('sm')
+            ->slideOver();
+    });
+    ```
+
+- **Simple** — A dropdown list for switching panels directly:
+
+    ```php
+    PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
+        $panelSwitch->simple();
+    });
+    ```
+
+For full control over the look and feel, you can publish the views and make your own adjustments:
+
+```bash
+php artisan vendor:publish --tag="filament-panel-switch-views"
+```
+
+### Labels
+Provide custom labels for each panel. The keys should be valid panel IDs, and values can be strings or translatable strings:
+
 ```php
 PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
     $panelSwitch
-        ...
-        ->panels(['admin', 'dev', 'app']) // default order if `sort()` method not used 
-        ->sort() // ['admin', 'app', 'dev']
-        // ->sort(order: 'desc') // ['dev', 'app', 'admin']
-        ...
-        ;
+        ->labels([
+            'admin' => 'Custom Admin Label',
+            'general_manager' => __('General Manager')
+        ]);
+});
+```
+
+### Icons
+Define icons for each panel using the `icons()` method. The keys should be valid panel IDs:
+
+```php
+PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {    
+    $panelSwitch->icons([
+        'admin' => 'heroicon-o-square-2-stack',
+        'app' => 'heroicon-o-star',
+    ]);
+});
+```
+
+For images instead of icons, set the `asImage` parameter to `true`:
+
+```php
+PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {    
+    $panelSwitch->icons([
+        'admin' => 'https://example.com/admin.jpg',
+        'app' => 'https://example.com/app.jpg',
+    ], asImage: true);
+});
+```
+
+Use `iconSize()` to customize the size (default `128px`). The value is multiplied by 4:
+
+```php
+PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
+    $panelSwitch->iconSize(32); // 128px
+});
+```
+
+### Sort Order
+By default panels are listed in registration order, or in the order provided via `panels()`. Use `sort()` to sort alphabetically:
+
+```php
+PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
+    $panelSwitch
+        ->panels(['admin', 'dev', 'app'])
+        ->sort();         // ascending: ['admin', 'app', 'dev']
+        // ->sort('desc') // descending: ['dev', 'app', 'admin']
 });
 ```
 
 ### Placement
-You can choose where the panel switch menu should be placed. By default panel switch menu is rendered via 'panels::global-search.before' `Hook`. But you can change it to anyone of the other available Filament [Render Hooks](https://filamentphp.com/docs/3.x/support/render-hooks#available-render-hooks).
-```php
-use BezhanSalleh\PanelSwitch\PanelSwitch;
+By default the panel switch is rendered via the `panels::global-search.before` render hook. You can change this to any available Filament [Render Hook](https://filamentphp.com/docs/3.x/support/render-hooks#available-render-hooks):
 
+```php
 PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
     $panelSwitch->renderHook('panels::global-search.after');
 });
 ```
 
-### Usage
-The `Panel Switch Plugin` has a fluent api so you can chain the methods together and configure everything in one go.
+### Full Example
 
 ```php
 use BezhanSalleh\PanelSwitch\PanelSwitch;
@@ -317,22 +255,6 @@ PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
 });
 ```
 
-### Panel Exclusion 
-**`@deprecated`** use **`panels()`** method instead.
-By default all the panels available will be listed in the panel switch menu. But you can exclude some of them by using the excludes() method.
-```php
-PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
-    $panelSwitch->excludes([
-        'saas'
-    ]);
-});
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="filament-panel-switch-views"
-```
 ### Testing
 
 ```bash

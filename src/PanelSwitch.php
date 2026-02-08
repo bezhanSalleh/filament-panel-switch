@@ -15,12 +15,6 @@ class PanelSwitch extends Component
 {
     use Concerns\HasPanelValidator;
 
-    protected array | Closure $excludes = [];
-
-    protected bool | Closure | null $visible = null;
-
-    protected bool | Closure | null $canSwitchPanel = true;
-
     protected bool | Closure $isModalSlideOver = false;
 
     protected string | Closure | null $modalWidth = null;
@@ -28,6 +22,8 @@ class PanelSwitch extends Component
     protected bool | Closure $isSimple = false;
 
     protected array | Closure $icons = [];
+
+    protected array | Closure $darkIcons = [];
 
     protected int | Closure | null $iconSize = null;
 
@@ -47,23 +43,7 @@ class PanelSwitch extends Component
     {
         $static = app(static::class);
 
-        $static->visible(function () use ($static) {
-            if (($user = auth()->user()) === null) {
-                return false;
-            }
-
-            if (method_exists($user, 'canAccessPanel')) {
-                return $user->canAccessPanel($static->getCurrentPanel());
-            }
-
-            return true;
-        });
-
         $static->configure();
-
-        if (count($static->getPanels()) < 2) {
-            $static->visible(false);
-        }
 
         return $static;
     }
@@ -84,6 +64,7 @@ class PanelSwitch extends Component
 
                 return view('filament-panel-switch::panel-switch-menu', [
                     'currentPanel' => $currentPanel,
+                    'darkIcons' => $static->getDarkIcons(),
                     'hasTopbar' => $currentPanel->hasTopbar(),
                     'heading' => $static->getModalHeading(),
                     'icons' => $static->getIcons(),
@@ -99,23 +80,6 @@ class PanelSwitch extends Component
         );
     }
 
-    public function canSwitchPanels(bool | Closure $condition): static
-    {
-        $this->canSwitchPanel = $condition;
-
-        return $this;
-    }
-
-    /**
-     * @deprecated Use `panels()` instead.
-     */
-    public function excludes(array | Closure $panelIds): static
-    {
-        $this->excludes = $panelIds;
-
-        return $this;
-    }
-
     public function modalHeading(string | Closure $modalHeading): static
     {
         $this->modalHeading = $modalHeading;
@@ -125,17 +89,15 @@ class PanelSwitch extends Component
 
     public function icons(array | Closure $icons, bool $asImage = false): static
     {
-        if ($asImage) {
-            foreach ($icons as $key => $icon) {
-                if (! str($icon)->startsWith(['http://', 'https://'])) {
-                    throw new \Exception('All icons must be URLs when $asImage is true.');
-                }
-            }
-        }
-
         $this->renderIconAsImage = $asImage;
-
         $this->icons = $icons;
+
+        return $this;
+    }
+
+    public function darkIcons(array | Closure $darkIcons): static
+    {
+        $this->darkIcons = $darkIcons;
 
         return $this;
     }
@@ -189,29 +151,11 @@ class PanelSwitch extends Component
         return $this;
     }
 
-    /**
-     * Whether to sort the panels by their order or not.
-     * 1. null - Default order, provided by the user through the `panels` method.
-     * 2. 'asc' - Ascending order
-     * 3. 'desc' - Descending order
-     */
     public function sort(string $order = 'asc'): static
     {
         $this->sortOrder = $order;
 
         return $this;
-    }
-
-    public function visible(bool | Closure $visible): static
-    {
-        $this->visible = $visible;
-
-        return $this;
-    }
-
-    public function getExcludes(): array
-    {
-        return (array) $this->evaluate($this->excludes);
     }
 
     public function getModalHeading(): string
@@ -221,7 +165,24 @@ class PanelSwitch extends Component
 
     public function getIcons(): array
     {
-        return (array) $this->evaluate($this->icons);
+        $icons = (array) $this->evaluate($this->icons);
+
+        if ($this->renderIconAsImage) {
+            $this->ensureIconsAreUrls($icons);
+        }
+
+        return $icons;
+    }
+
+    public function getDarkIcons(): array
+    {
+        $darkIcons = (array) $this->evaluate($this->darkIcons);
+
+        if ($this->renderIconAsImage) {
+            $this->ensureIconsAreUrls($darkIcons);
+        }
+
+        return $darkIcons;
     }
 
     public function getIconSize(): int
@@ -241,7 +202,9 @@ class PanelSwitch extends Component
 
     public function isAbleToSwitchPanels(): bool
     {
-        if (($user = auth()->user()) === null) {
+        $user = auth()?->user();
+
+        if (blank($user)) {
             return false;
         }
 
@@ -249,7 +212,7 @@ class PanelSwitch extends Component
             return $user->canSwitchPanels();
         }
 
-        return $this->evaluate($this->canSwitchPanel);
+        return true;
     }
 
     public function isModalSlideOver(): bool
@@ -264,7 +227,7 @@ class PanelSwitch extends Component
 
     public function isVisible(): bool
     {
-        return (bool) $this->evaluate($this->visible);
+        return count($this->getPanels()) >= 2;
     }
 
     public function getSortOrder(): ?string
@@ -277,7 +240,7 @@ class PanelSwitch extends Component
         $panelIds = (array) $this->evaluate($this->panels);
 
         return collect(Filament::getPanels())
-            ->reject(fn (Panel $panel) => in_array($panel->getId(), $this->getExcludes()))
+            ->filter($this->canUserAccessPanel(...))
             ->when(
                 value: filled($panelIds),
                 callback: function ($panelCollection) use ($panelIds) {
@@ -314,21 +277,39 @@ class PanelSwitch extends Component
 
     public function getRenderHook(): string
     {
-        if ($this->renderHook !== null) {
-            return $this->renderHook;
-        }
-
-        $currentPanel = $this->getCurrentPanel();
-
-        if ($currentPanel->hasTopbar()) {
-            return PanelsRenderHook::GLOBAL_SEARCH_BEFORE;
-        }
-
-        return PanelsRenderHook::USER_MENU_BEFORE;
+        return match (true) {
+            filled($this->renderHook) => $this->renderHook,
+            $this->getCurrentPanel()->hasTopbar() => PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
+            default => PanelsRenderHook::USER_MENU_BEFORE
+        };
     }
 
     public function getRenderIconAsImage(): bool
     {
-        return $this->renderIconAsImage;
+        return (bool) $this->evaluate($this->renderIconAsImage);
+    }
+
+    private function ensureIconsAreUrls(array $icons): void
+    {
+        foreach ($icons as $panel => $icon) {
+            if (! str($icon)->startsWith(['http://', 'https://'])) {
+                throw new \InvalidArgumentException("The icon for the [{$panel}] panel must be a URL starting with http:// or https://.");
+            }
+        }
+    }
+
+    protected function canUserAccessPanel(Panel $panel): bool
+    {
+        $user = auth()->user();
+
+        if (blank($user)) {
+            return false;
+        }
+
+        if (method_exists($user, 'canAccessPanel')) {
+            return $user->canAccessPanel($panel);
+        }
+
+        return true;
     }
 }
