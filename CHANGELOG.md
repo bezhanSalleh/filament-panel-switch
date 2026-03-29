@@ -2,6 +2,14 @@
 
 All notable changes to `filament-panel-switch` will be documented in this file.
 
+## 3.1.0 - 2026-03-29
+
+### What's Changed
+
+* Adds Laravel 13 Support by @bezhanSalleh in https://github.com/bezhanSalleh/filament-panel-switch/pull/62
+
+**Full Changelog**: https://github.com/bezhanSalleh/filament-panel-switch/compare/3.0.0...3.1.0
+
 ## 3.0.0 - 2026-02-08
 
 ### What's Changed
