@@ -10,29 +10,22 @@
 ])
 
 @if ($topbar)
-    <span x-data="{ get isDark() { return $store.theme === 'dark' || ($store.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) } }" class="contents">
-        <x-filament::icon-button
+    <button
+        type="button"
+        class="flex items-center gap-x-1 bg-gray-100 rounded-full! dark:bg-custom-500/20 px-2 py-1"
+        style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
+        x-on:click="'{{ filled($modalId) }}' && $dispatch('open-modal', { id: '{{ $modalId }}' })"
+        aria-label="{{ $label }}"
+    >
+        <x-filament-panel-switch::panel-icon
             :icon="$icon"
-            icon-alias="panels::panel-switch-trigger"
-            icon-size="lg"
-            :label="$label"
-            class="bg-gray-100 rounded-full! dark:bg-custom-500/20"
-            style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
-            x-show="!isDark"
-            x-on:click="'{{ filled($modalId) }}' && $dispatch('open-modal', { id: '{{ $modalId }}' })"
+            :dark-icon="$darkIcon"
+            :render-as-image="$renderAsImage"
+            class="h-5 w-5 shrink-0"
+            :alt="$label"
         />
-        <x-filament::icon-button
-            :icon="$darkIcon ?? $icon"
-            icon-alias="panels::panel-switch-trigger"
-            icon-size="lg"
-            :label="$label"
-            class="bg-gray-100 rounded-full! dark:bg-custom-500/20"
-            style="{{ \Filament\Support\get_color_css_variables('primary', shades: [100, 500]) }}; min-width: 36px;"
-            x-show="isDark"
-            x-cloak
-            x-on:click="'{{ filled($modalId) }}' && $dispatch('open-modal', { id: '{{ $modalId }}' })"
-        />
-    </span>
+        <span class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ $label }}</span>
+    </button>
 @else
     <button
         x-data="{ tooltip: false }"
