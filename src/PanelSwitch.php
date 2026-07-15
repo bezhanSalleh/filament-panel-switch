@@ -249,7 +249,7 @@ class PanelSwitch extends Component
                     $withDefaultOrder = $panelCollection->only($panelIds);
 
                     return collect($panelIds)
-                        ->map(fn (string $id) => $withDefaultOrder[$id])
+                        ->map(fn (string $id) => $withDefaultOrder[$id] ?? null)
                         ->filter();
                 },
                 default: fn ($panelCollection) => $panelCollection
